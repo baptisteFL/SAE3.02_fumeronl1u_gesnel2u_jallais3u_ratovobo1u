@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Roboto, sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -8,18 +8,26 @@ body {
 header {
     background-color: #00aced;
     color: #fff;
-    padding: 10px;
+    padding: 2vh 0;
+    display: flex;
+}
+
+a > p {
+    display: inline;
+    text-align: right;
+    padding: 1vw;
+    margin-top: 10px;
+    font-size: larger;
+}
+
+a > img {
+    width: 20vw;
+    padding: 0 2vw;
 }
 
 header h1 {
     margin: 0;
     padding: 0;
-}
-
-h1 a {
-    background-color: #00aced;
-    color: #fff;
-    padding: 10px;
 }
 
 .tweet {
@@ -57,7 +65,32 @@ button:hover {
     background-color: #0079b8;
 }
 
-nav a {
-    background-color: #fff;
-    color: #00aced;
+header > a {
+    color: white;
+    text-decoration: none;
+    text-align: right;
+    margin: auto 0;
+}
+
+#signin {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-content: center;
+    max-width: 30%;
+    margin: 10vh auto;
+}
+
+#signin > h1 {
+    text-align: center;
+}
+
+#user {
+    filter: invert(1);
+    max-width: 8vh;
+}
+
+#userlink {
+    margin-left: auto;
+    padding: 1vh;
 }
