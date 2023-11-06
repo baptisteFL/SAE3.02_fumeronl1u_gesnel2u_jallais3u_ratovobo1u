@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #00aced;
+    color: #fff;
+    padding: 10px;
+}
+
+header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+h1 a {
+    background-color: #00aced;
+    color: #fff;
+    padding: 10px;
+}
+
+.tweet {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin: 10px;
+    padding: 10px;
+}
+
+.tweet .author {
+    font-weight: bold;
+}
+
+.tweet .timestamp {
+    color: #888;
+}
+
+.tweet .content {
+    margin-top: 5px;
+}
+
+.tweet .actions {
+    margin-top: 10px;
+}
+
+button {
+    background-color: #00aced;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0079b8;
+}
+
+nav a {
+    background-color: #fff;
+    color: #00aced;
+}

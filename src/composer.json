@@ -1,0 +1,11 @@
+{
+  "name": "htdocs/sae",
+  "description": "SAE3.02",
+  "type": "project",
+
+  "autoload": {
+    "psr-4": {
+      "iutnc\\touiteur\\": "classes"
+    }
+  }
+}
