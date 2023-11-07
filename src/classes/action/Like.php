@@ -12,7 +12,7 @@ class Like extends Action {
             // vérifie si un utilisateur est connecté
             if(isset($_SESSION['user'])){
                 try{
-                    $connexion = new PDO('mysql:host=localhost; dbname=carent; charset=utf8','root','');
+                    $connexion = new PDO('mysql:host=localhost; dbname=sae; charset=utf8','root','');
                 } catch(Exception $e){
                     die('erreur :'.$e->getMessage());
                 }
@@ -31,6 +31,7 @@ class Like extends Action {
                 $update->bindParam(2, $idTouite);
                 $update->execute();
                 // mettre à jour la note sur la page main
+
 
             } else {
                 // redirigé l'utilisateur vers la page de connection si il n'est pas connecté
