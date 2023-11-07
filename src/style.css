@@ -145,3 +145,13 @@ header > a {
     font-weight: bold;
     margin-right: 0.7vw;
 }
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.actions button,
+.actions p {
+    margin: 0 10px;
+}
