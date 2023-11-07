@@ -44,28 +44,11 @@ use iutnc\touiteur\dispatch\Dispatcher;
 
 require_once "vendor/autoload.php";
 
-if($_SERVER['REQUEST_METHOD']=='GET'){
-    if($_GET['action']=='sign-in'){
-        echo "
-<form method='post' action='' class='tweet' id='signin'>
-        <h1>Connectez-vous !</h1>
-        <label for='email'>Email</label>
-        <input type='text' name='email' id='email'><br>
-        <label for='password'>Mot de passe</label>
-        <input type='password' name='password' id='password'><br>
-        <input type='submit' value='Envoyer'>
-        </form>";
-    }elseif ($_GET['action']=='add-user') {
-        echo "
-<form method='post' action='' class='tweet' id='signin'>
-        <h1>Inscrivez-vous !</h1>
-        <label for='email'>Email</label>
-        <input type='text' name='email' id='email'><br>
-        <label for='password'>Mot de passe</label>
-        <input type='password' name='password' id='password'><br>
-        <input type='submit' value='Envoyer'>
-        </form>";
-    } elseif($_GET['action']=='tweet'){
+$dispatcher = new Dispatcher();
+$dispatcher->run();
+
+if($_SERVER['REQUEST_METHOD']=='GET') {
+    if ($_GET['action'] == 'tweet') {
         echo '<div class="tweet">
             <div class="author">John Doe</div>
     <div class="timestamp">2 hours ago</div>
@@ -78,7 +61,4 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
     </div>
 </div>';
     }
-}elseif($_SERVER['REQUEST_METHOD']=='POST') {
-    $dispatcher = new Dispatcher();
-    $dispatcher->run();
 }

@@ -14,14 +14,27 @@ class SignIn extends Action
 
     public function execute(): string
     {
+
         $html = "";
-        $html .= "<br> Tentative d'authentification...<br>";
-        try{
-            Auth::authentificate($_POST['email'], $_POST['password']);
-            $html .= "<br> Authentification réussie !<br>";
-            $user = new User($_POST['email'], $_POST['password'], "user");
-        }catch (AuthException $e){
-            $html .= "<br> Authentification échouée !<br>";
+        if($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $html .= "
+<form method='post' action='' class='tweet' id='signin'>
+        <h1>Connectez-vous !</h1>
+        <label for='email'>Email</label>
+        <input type='text' name='email' id='email'><br>
+        <label for='password'>Mot de passe</label>
+        <input type='password' name='password' id='password'><br>
+        <input type='submit' value='Envoyer'>
+        </form>";
+        }elseif($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $html .= "<br> Tentative d'authentification...<br>";
+            try{
+                Auth::authentificate($_POST['email'], $_POST['password']);
+                $html .= "<br> Authentification réussie !<br>";
+                $user = new User($_POST['email'], $_POST['password'], "user");
+            }catch (AuthException $e){
+                $html .= "<br> Authentification échouée !<br>";
+            }
         }
         return $html;
     }
