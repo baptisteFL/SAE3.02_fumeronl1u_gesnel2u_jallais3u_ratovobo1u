@@ -2,6 +2,7 @@
 
 namespace iutnc\touiteur\action;
 
+use DateTime;
 use iutnc\touiteur\auth\Auth;
 use iutnc\touiteur\auth\AuthException;
 use iutnc\touiteur\db\ConnectionFactory;
@@ -35,7 +36,7 @@ class FeedAction extends Action
                         }
                         $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
-                        $html .= '<div class="timestamp">' . $row['date'] . '</div>';
+                        $html .= '<div class="timestamp">' . "Il y a " . $this->calculerDepuisQuand($row['id_touite']) . '</div>';
                         $html .= '<div class="content">' . $row['texte'] . '</div>';
                         $html .= '<div class="tags">';
                         $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
@@ -83,6 +84,35 @@ class FeedAction extends Action
             }
         }
         return $i;
+    }
+
+    public static function calculerDepuisQuand($id_touite){
+        ConnectionFactory::makeConnection();
+        $bdd = ConnectionFactory::$bdd;
+        $req = $bdd->prepare("SELECT * FROM touite WHERE id_touite = :idTouite");
+        $req->bindValue(":idTouite", $id_touite);
+        $result = $req->execute();
+        if ($result) {
+            while ($row = $req->fetch()) {
+                $date = $row['date'];
+            }
+        }
+        $date = new DateTime($date);
+        $now = new DateTime();
+        $interval = $now->diff($date);
+        if($interval->y > 0){
+            return $interval->y." ans";
+        }else if($interval->m > 0){
+            return $interval->m." mois";
+        }else if($interval->d > 0){
+            return $interval->d." jours";
+        }else if($interval->h > 0){
+            return $interval->h." heures";
+        }else if($interval->i > 0){
+            return $interval->i." minutes";
+        }else if($interval->s > 0){
+            return $interval->s." secondes";
+        }
     }
 
 }
