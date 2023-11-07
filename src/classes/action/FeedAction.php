@@ -31,10 +31,10 @@ class FeedAction extends Action
         <button id = "like">Like</button>
         <button id = "dislike">Dislike</button>
         <button>Retouite</button>
-        <p>0</p>
     </div>
 </div>
-    <a id="postTweet" href="?action=postTweet">
+
+    <a id="postTweet" href="?action=touite">
     <img src="images/postTweet.png" alt="post a tweet"/>
     </a>';
         }

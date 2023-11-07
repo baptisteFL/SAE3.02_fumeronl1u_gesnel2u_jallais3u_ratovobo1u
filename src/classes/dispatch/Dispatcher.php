@@ -5,6 +5,7 @@ namespace iutnc\touiteur\dispatch;
 use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\SignIn;
+use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
 
 require_once "vendor/autoload.php";
@@ -31,6 +32,9 @@ class Dispatcher
                 break;
             case 'user-page':
                 $action = new UserPageAction();
+                break;
+            case 'touite':
+                $action = new TouiteAction();
                 break;
             default:
                 $action = new FeedAction();

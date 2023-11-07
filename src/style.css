@@ -10,6 +10,8 @@ header {
     color: #fff;
     padding: 2vh 0;
     display: flex;
+    position: sticky;
+    top: 0;
 }
 
 a > p {
@@ -146,12 +148,30 @@ header > a {
     margin-right: 0.7vw;
 }
 
-.actions {
-    display: flex;
-    align-items: center;
+#text {
+    padding-bottom: 30vh;
+    font-size: large;
 }
 
-.actions button,
-.actions p {
-    margin: 0 10px;
+#formTouite {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-content: center;
+    max-width: 50%;
+    margin: 10vh auto;
+}
+
+#submitTouite {
+    max-width: 50%;
+    margin-left: auto;
+    background-color: #00aced;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#submitTouite:hover {
+    background-color: #0079b8;
 }
