@@ -4,7 +4,7 @@ namespace iutnc\touiteur\action;
 
 
 use iutnc\touiteur\db\ConnectionFactory;
-use iutnc\touiteur\action\FeedAction;
+
 class DisplayTouiteUserAction extends Action
 {
         public function execute() : string
