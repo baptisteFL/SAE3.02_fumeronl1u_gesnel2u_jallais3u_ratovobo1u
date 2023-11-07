@@ -13,7 +13,7 @@ class DisplayTouiteUserAction extends Action
             $bdd = ConnectionFactory::$bdd;
             //afficher les touites de l'utilisateur
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT touite.id_touite, touite.texte, touite.date 
+            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.date 
                                     from touite, atouite, utilisateur where utilisateur.nomUtil = :nomUtil 
                                                                         and utilisateur.emailUtil = atouite.emailUtil 
                                                                         and atouite.id_touite = touite.id_touite order by date desc");
@@ -23,7 +23,7 @@ class DisplayTouiteUserAction extends Action
                 while($row = $requete->fetch()){
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                    $html .= '<div class="author">' . $_GET['nomUtil'] . '</div>';
+                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
                     $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
@@ -36,7 +36,7 @@ class DisplayTouiteUserAction extends Action
                     $result3 = $req3->execute();
                     if ($result3) {
                         while ($row3 = $req3->fetch()) {
-                            $html .= '<p class="trending">#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                            $html .= '<p class="trending">'."<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>".'#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';
                         }
                     }
                     $html .= '</div>';
