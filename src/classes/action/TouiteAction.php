@@ -40,6 +40,7 @@ class TouiteAction extends Action
                 $req2->bindValue(":emailUtil", $user->__get('email'));
                 $req2->bindValue(":date", date("Y-m-d H:i:s"));
                 $req2->bindValue(":idTouite", $nouvelleId);
+                $result2 = $req2->execute();
                 $req3 = $bdd->prepare("INSERT INTO tag (id_tag, libelleTag) VALUES (:idTag, :libelleTag)");
                 $req4 = $bdd->prepare("INSERT INTO touitepartag (id_tag, id_touite) VALUES (:idTag, :idTouite)");
                 $tags = explode(";", $_POST['tag']);
