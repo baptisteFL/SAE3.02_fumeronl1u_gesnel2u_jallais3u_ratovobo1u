@@ -5,6 +5,7 @@ namespace iutnc\touiteur\dispatch;
 use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\SignIn;
+use iutnc\touiteur\action\UserPageAction;
 
 require_once "vendor/autoload.php";
 
@@ -15,7 +16,7 @@ class Dispatcher
     public function __construct()
     {
         // Récupère la valeur du paramètre "action" du query-string
-        $this->action = isset($_GET['action']) ? $_GET['action'] : 'add-user';
+        $this->action = isset($_GET['action']) ? $_GET['action'] : 'feed';
     }
 
     public function run():void
@@ -25,11 +26,11 @@ class Dispatcher
             case 'add-user':
                 $action = new AddUserAction();
                 break;
-            case 'feed':
-                $action = new FeedAction();
-                break;
             case 'sign-in':
                 $action = new SignIn();
+                break;
+            case 'user-page':
+                $action = new UserPageAction();
                 break;
             default:
                 $action = new FeedAction();
