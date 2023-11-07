@@ -22,6 +22,7 @@ class TouiteAction extends Action
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
             ';
+            $html .= unserialize($_SESSION['user'])->__get('email');
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_SESSION['user'])) {
                 $user = unserialize($_SESSION['user']);
@@ -42,6 +43,9 @@ class TouiteAction extends Action
                 $req3 = $bdd->prepare("INSERT INTO tag (id_tag, libelleTag) VALUES (:idTag, :libelleTag)");
                 $req4 = $bdd->prepare("INSERT INTO touitepartag (id_tag, id_touite) VALUES (:idTag, :idTouite)");
                 $tags = explode(";", $_POST['tag']);
+                if($tags[0] == ""){
+                    $tags = [];
+                }
                 foreach ($tags as $tag) {
                     $nouveauIdTag = self::trouverIdTag($tag);
                     if(self::tagExistant($tag)){
