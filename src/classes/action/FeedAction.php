@@ -53,20 +53,18 @@ class FeedAction extends Action
         <button id = "dislike">Dislike</button>
         <button>Retouite</button>
     </div>
-</div>
-
-    <a id="postTweet" href="?action=touite">
-    <img src="images/postTweet.png" alt="post a tweet"/>
-    </a>';
+</div>';
                     }
-                    return $html;
                 }
             }catch
             (Exception $e) {
                 $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
             }
         }
-        return $html;
+        return $html . '
+    <a id="postTweet" href="?action=touite">
+    <img src="images/postTweet.png" alt="post a tweet"/>
+    </a>';
     }
 
 
