@@ -36,6 +36,9 @@ class Dispatcher
             case 'touite':
                 $action = new TouiteAction();
                 break;
+            case 'display-touite-user':
+                $action = new DisplayTouiteUserAction();
+                break;
             default:
                 $action = new FeedAction();
                 break;
