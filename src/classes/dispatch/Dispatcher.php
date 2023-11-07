@@ -21,9 +21,6 @@ class Dispatcher
     {
         // Utilise un switch pour déterminer quelle classe Action instancier
         switch ($this->action) {
-            case 'add-user':
-                $action = new AddUserAction();
-                break;
             case 'sign-in':
                 $action = new SignIn();
                 break;

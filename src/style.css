@@ -94,3 +94,54 @@ header > a {
     margin-left: auto;
     padding: 1vh;
 }
+
+#postTweet {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    max-width: 5vw;
+    padding: 1.5vw;
+    margin: 2vw;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 2px 2px 10px gray;
+}
+
+#postTweet > img {
+    max-width: 4vw;
+    margin: 0;
+    padding: 0;
+}
+
+#postTweet:hover {
+    background-color: #f0f0f0;
+    transition-duration: 0.2s;
+}
+
+.tags {
+    gap: 1vw;
+    font-size: small;
+    color: #888;
+    margin: 0.7vh 0;
+}
+
+.tags > p {
+    display: inline;
+}
+
+#titleTweet > * {
+    display: inline;
+}
+
+#follow {
+    margin-left: 0.5vw;
+}
+
+.trending {
+    color: #ff7e5c;
+}
+
+#numberTweet {
+    font-weight: bold;
+    margin-right: 0.7vw;
+}

@@ -16,19 +16,7 @@
     <a href="?action=add-user"><p>Inscription</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 </header>
-<!--
-<div class="tweet">
-    <div class="author">John Doe</div>
-    <div class="timestamp">2 hours ago</div>
-    <div class="content">
-        This is a sample tweet on Touiteur.app. #TouiteurApp
-    </div>
-    <div class="actions">
-        <button>Like</button>
-        <button>Retweet</button>
-    </div>
-</div>
--->
+
 </body>
 </html>
 
@@ -67,16 +55,28 @@ if($_SERVER['REQUEST_METHOD']=='GET'){
         </form>";
     } elseif($_GET['action']=='tweet'){
         echo '<div class="tweet">
+        <span id="titleTweet">
             <div class="author">John Doe</div>
+            <div class="actions" id="follow"><button>Suivre</button></div>
+        </span>
     <div class="timestamp">2 hours ago</div>
     <div class="content">
-        This is a sample tweet on Touiteur.app. #TouiteurApp
+        This is a sample tweet on Touiteur.app.
+    </div>
+    <div class="tags">
+    <p class="trending">#Populaire <p id="numberTweet" class="trending">12k</p></p>
+    <p>#Exemple <p id="numberTweet">1k</p></p>    
     </div>
     <div class="actions">
         <button>Like</button>
-        <button>Retweet</button>
+        <button>Dislike</button>
+        <button>Retouite</button>
     </div>
-</div>';
+</div>
+    <a id="postTweet" href="?action=postTweet">
+    <img src="images/postTweet.png" alt="post a tweet"/>
+    </a>
+';
     }
 }elseif($_SERVER['REQUEST_METHOD']=='POST') {
     $dispatcher = new Dispatcher();
