@@ -15,16 +15,13 @@ class Auth
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM user WHERE email = :email");
+        $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
         $req->bindValue(":email", $email);
         $result = $req->execute();
         if ($result) {
             while ($row = $req->fetch()) {
-                echo $row['passwd'];
-                echo $password;
-                echo "<br> ".password_verify($row['passwd'], $password)." <br>";
-                if (password_verify($password, $row['passwd'])) {
-                    $user = new User($row['email'], $row['passwd'], $row['role']);
+                if (password_verify($password, $row['password'])) {
+                    $user = new User($row['email'], $row['passwordd'], $row['role']);
                     echo "<br> Authentification réussie <br>";
                     $_SESSION['user'] = serialize($user);
                     return true;
@@ -34,7 +31,7 @@ class Auth
         throw new AuthException("L'authentification a échoué");
     }
 
-    public static function register(string $email, string $password)
+    public static function register(string $email, string $password, string $nom, string $prenom)
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -44,21 +41,23 @@ class Auth
             throw new AuthException("Le mot de passe doit contenir au moins 10 caractères");
         }
         // Email doit être unique
-        $req = $bdd->prepare("SELECT * FROM user WHERE email = :email");
+        $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
         $req->bindValue(":email", $email);
         $result = $req->execute();
         if ($result) {
             while ($row = $req->fetch()) {
-                if ($row['email'] == $email) {
+                if ($row['emailUtil'] == $email) {
                     echo "<br> L'email est déjà utilisé <br>";
                     throw new AuthException("L'email est déjà utilisé");
                 }
             }
         }
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $req = $bdd->prepare("INSERT INTO user(email, passwd, role) VALUES (:email, :password, '1')");
+        $req = $bdd->prepare("INSERT INTO utilisateur(emailUtil, nomUtil, prenomUtil, password, role) VALUES (:email, :nom, :prenom, :password, 'user')");
         $req->bindValue(":email", $email);
         $req->bindValue(":password", $passwordHash);
+        $req->bindValue(":nom", $nom);
+        $req->bindValue(":prenom", $prenom);
         $result = $req->execute();
         if (!$result) {
             echo "<br> L'inscription a échoué <br>";
