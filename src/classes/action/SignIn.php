@@ -30,8 +30,9 @@ class SignIn extends Action
             $html .= "<br> Tentative d'authentification...<br>";
             try{
                 Auth::authentificate($_POST['email'], $_POST['password']);
-                $html .= "<br> Authentification réussie !<br>";
                 $user = new User($_POST['email'], $_POST['password'], "user");
+                $_SESSION['user'] = serialize($user);
+                $html .= "<br> Authentification réussie !<br>";
             }catch (AuthException $e){
                 $html .= "<br> Authentification échouée !<br>";
             }

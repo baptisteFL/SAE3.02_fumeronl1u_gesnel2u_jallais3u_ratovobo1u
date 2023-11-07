@@ -21,8 +21,7 @@ class Auth
         if ($result) {
             while ($row = $req->fetch()) {
                 if (password_verify($password, $row['password'])) {
-                    $user = new User($row['email'], $row['passwordd'], $row['role']);
-                    echo "<br> Authentification réussie <br>";
+                    $user = new User($row['emailUtil'], $row['password']);
                     $_SESSION['user'] = serialize($user);
                     return true;
                 }

@@ -11,12 +11,13 @@ class User
 
     private String $email;
     private String $password;
+    private String $Nom;
+    private String $Prenom;
     private String $role;
 
-    public function __construct(String $email, String $password, String $role){
+    public function __construct(String $email, String $password){
         $this->email = $email;
         $this->password = $password;
-        $this->role = $role;
     }
 
 
@@ -27,6 +28,10 @@ class User
             return $this->password;
         }else if($name === "role"){
             return $this->role;
+        }else if($name === "Nom") {
+            return $this->Nom;
+        }else if($name === "Prenom") {
+            return $this->Prenom;
         }
     }
 
