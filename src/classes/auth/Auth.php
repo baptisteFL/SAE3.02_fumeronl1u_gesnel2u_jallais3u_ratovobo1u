@@ -20,6 +20,9 @@ class Auth
         $result = $req->execute();
         if ($result) {
             while ($row = $req->fetch()) {
+                echo $row['passwd'];
+                echo $password;
+                echo "<br> ".password_verify($row['passwd'], $password)." <br>";
                 if (password_verify($password, $row['passwd'])) {
                     $user = new User($row['email'], $row['passwd'], $row['role']);
                     echo "<br> Authentification réussie <br>";
@@ -52,8 +55,7 @@ class Auth
                 }
             }
         }
-
-        $passwordHash = crypt(password_hash($password, PASSWORD_DEFAULT), "deefy");
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $req = $bdd->prepare("INSERT INTO user(email, passwd, role) VALUES (:email, :password, '1')");
         $req->bindValue(":email", $email);
         $req->bindValue(":password", $passwordHash);
