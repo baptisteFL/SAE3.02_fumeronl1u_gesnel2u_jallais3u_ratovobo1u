@@ -31,7 +31,7 @@ class FeedAction extends Action
                         $result2 = $req2->execute();
                         if ($result2) {
                             while ($row2 = $req2->fetch()) {
-                                $html .= '<div class="author">' . $row2['prenomUtil'] . ' ' . $row2['nomUtil'] . '</div>';
+                                $html .= '<div class="author">'."<a href='?action=display-touite-user&nomUtil={$row2['nomUtil']}'>" . $row2['prenomUtil'] . ' ' .$row2['nomUtil'] ."</a>". '</div>';
                             }
                         }
                         $html .= '<div class="actions" id="follow"><button>Suivre</button></div>

@@ -7,6 +7,7 @@ use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\SignIn;
 use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
+use iutnc\touiteur\action\DisplayTouiteUserAction;
 
 require_once "vendor/autoload.php";
 
