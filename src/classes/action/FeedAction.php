@@ -28,9 +28,10 @@ class FeedAction extends Action
     <p>#Exemple <p id="numberTweet">1k</p></p>    
     </div>
     <div class="actions">
-        <button>Like</button>
-        <button>Dislike</button>
+        <button id = "like">Like</button>
+        <button id = "dislike">Dislike</button>
         <button>Retouite</button>
+        <p>0</p>
     </div>
 </div>
     <a id="postTweet" href="?action=postTweet">
