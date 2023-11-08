@@ -13,7 +13,7 @@ class DisplayTouiteUserAction extends Action
             $bdd = ConnectionFactory::$bdd;
             //afficher les touites de l'utilisateur a partir de son mail
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.date, utilisateur.emailUtil 
+            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil 
                                             FROM touite natural join atouite natural join utilisateur 
                                             WHERE utilisateur.emailUtil = :emailUtil ORDER BY touite.date DESC");
             $requete->bindValue(":emailUtil", $_GET['emailUtil']);
