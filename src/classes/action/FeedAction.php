@@ -15,7 +15,7 @@ class FeedAction extends Action
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM touite order by date desc");
+        $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc");
         $html = "";
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
@@ -58,7 +58,7 @@ class FeedAction extends Action
                 }
             } catch
             (Exception $e) {
-                $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
+                $html .= "<br> Erreur !<br>";
             }
         }
         return $html . '
@@ -105,7 +105,7 @@ class FeedAction extends Action
         $result = $req->execute();
         if ($result) {
             while ($row = $req->fetch()) {
-                $date = $row['date'];
+                $date = $row['dateTouite'];
             }
         }
         $date = new DateTime($date);

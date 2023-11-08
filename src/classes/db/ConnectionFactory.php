@@ -24,7 +24,7 @@ class ConnectionFactory{
             $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$bdd = $bdd;
         }catch(Exception $e){
-            $bdd = new PDO("mysql:host=localhost;dbname=sae", "root", "");
+            $bdd = new PDO("mysql:host=localhost;dbname=saee", "root", "");
             $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$bdd = $bdd;
         }
