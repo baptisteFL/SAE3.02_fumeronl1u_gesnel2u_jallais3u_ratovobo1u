@@ -43,7 +43,7 @@ class DisplayTouiteTagAction extends Action
                 $result3 = $req3->execute();
                 if ($result3) {
                     while ($row3 = $req3->fetch()) {
-                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';
+                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                     }
                 }
                 $html .= '</div>';
