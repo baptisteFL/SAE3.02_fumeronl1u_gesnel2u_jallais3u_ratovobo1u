@@ -6,7 +6,7 @@ use DateTime;
 use iutnc\touiteur\auth\Auth;
 use iutnc\touiteur\auth\AuthException;
 use iutnc\touiteur\db\ConnectionFactory;
-use const Exception;
+use Exception;
 
 require_once "vendor/autoload.php";
 
@@ -49,8 +49,8 @@ class FeedAction extends Action
                         }
                         $html .= '</div>';
                         $html .= '<div class="actions">
-        <button id = "like">Like</button>
-        <button id = "dislike">Dislike</button>
+        <a href="?action=like&id=' . $row['id_touite'] . '"><button id = "like">Like</button></a>
+        <a href="?action=dislike&id=' . $row['id_touite'] . '"><button id = "dislike">Dislike</button></a>
         <button>Retouite</button>
     </div>
 </div>';
@@ -112,5 +112,4 @@ class FeedAction extends Action
             return $interval->s." secondes";
         }
     }
-
 }

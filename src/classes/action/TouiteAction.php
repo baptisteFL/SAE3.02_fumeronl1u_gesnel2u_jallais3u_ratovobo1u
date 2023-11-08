@@ -17,7 +17,7 @@ class TouiteAction extends Action
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $html .= '
         <form method="post" action="" class="tweet" id="formTouite">
-            <input type="text" name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
+            <input name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
             ';

@@ -151,6 +151,7 @@ header > a {
 #text {
     padding-bottom: 30vh;
     font-size: large;
+    border: 1px solid black;
 }
 
 #formTouite {
