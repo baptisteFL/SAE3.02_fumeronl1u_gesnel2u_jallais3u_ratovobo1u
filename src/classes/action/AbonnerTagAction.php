@@ -7,7 +7,7 @@ use iutnc\touiteur\db\ConnectionFactory;
 
 require_once "vendor/autoload.php";
 
-class AbonnerTag {
+class AbonnerTagAction {
 
     public function execute(): string {
 

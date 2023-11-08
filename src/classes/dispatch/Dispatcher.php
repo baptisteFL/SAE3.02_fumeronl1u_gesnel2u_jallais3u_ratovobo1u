@@ -2,6 +2,7 @@
 
 namespace iutnc\touiteur\dispatch;
 
+use iutnc\touiteur\action\AbonnerTagAction;
 use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\DislikeAction;
 use iutnc\touiteur\action\FeedAction;
@@ -47,6 +48,9 @@ class Dispatcher
             case 'display-touite-tag':
                 $action = new DisplayTouiteTagAction();
                 break;
+            case 'myTags' :
+                $action = new AbonnerTagAction();
+                break;
             default:
                 $action = new FeedAction();
                 break;
@@ -72,6 +76,7 @@ class Dispatcher
     <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>
     <a href="?action=sign-in"><p>Connexion</p></a>
     <a href="?action=add-user"><p>Inscription</p></a>
+    <a href="?action=myTags"><p>My tags</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
 </header>';
