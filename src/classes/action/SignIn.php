@@ -33,6 +33,8 @@ class SignIn extends Action
                 $user = new User($_POST['email'], $_POST['password'], "user");
                 $_SESSION['user'] = serialize($user);
                 $html .= "<br> Authentification réussie !<br>";
+                $html .= "<br> Bienvenue {$user->email} !<br>";
+                $html .= "<br> <a href='?action=feed'>Afficher le feed</a><br>";
             }catch (AuthException $e){
                 $html .= "<br> Authentification échouée !<br>";
             }

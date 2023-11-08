@@ -9,6 +9,7 @@ use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\DisplayTouiteTagAction;
+use iutnc\touiteur\action\DisplayTouite;
 
 require_once "vendor/autoload.php";
 
@@ -43,6 +44,9 @@ class Dispatcher
                 break;
             case 'display-touite-tag':
                 $action = new DisplayTouiteTagAction();
+                break;
+            case 'display-touite':
+                $action = new DisplayTouite();
                 break;
             default:
                 $action = new FeedAction();
