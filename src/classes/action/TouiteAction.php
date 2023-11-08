@@ -23,7 +23,6 @@ class TouiteAction extends Action
             $html .= '
         <form method="post" action="" class="tweet" id="formTouite" enctype="multipart/form-data">
             <input type="text" name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
-            <input type="text" name="tag" id="tag" placeholder="tag1;tag2"><br>
             <input type="file" name="fichier" id="fichier" placeholder="choisir une image"><br>
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
@@ -34,15 +33,6 @@ class TouiteAction extends Action
                 $user = unserialize($_SESSION['user']);
                 $texte = $_POST['texte'];
 
-                $upload_dir = __DIR__.'/img';
-                $filename = uniqid();
-                $tmp = $_FILES['fichier']['tmp_name'];
-                // problème le ficgier se télécharge dans le répertoire action et non dans le répertoire images
-                if (isset($_FILES['fichier']) && $_FILES['fichier']['error'] === UPLOAD_ERR_OK) {
-                    $type = pathinfo($_FILES['fichier']['name'], PATHINFO_EXTENSION);
-                    $dest = $upload_dir.$filename.".".$type;
-                    if(move_uploaded_file($tmp, $dest)){
-                        $fileclient = $dest;
 
                         ConnectionFactory::makeConnection();
                         $bdd = ConnectionFactory::$bdd;
@@ -80,8 +70,7 @@ class TouiteAction extends Action
                                 $result4 = $req4->execute();
                             }
                         }
-                    }
-                }
+
                 header('Location:?action=feed');
             }else{
                 $html .= "<br> Vous n'êtes pas connecté !<br>";
