@@ -8,6 +8,8 @@ use iutnc\touiteur\action\DislikeAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\LikeAction;
 use iutnc\touiteur\action\SignInAction;
+use iutnc\touiteur\action\SupprimerTouiteAction;
+use iutnc\touiteur\action\SuivreUtilAction;
 use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
@@ -63,6 +65,12 @@ class Dispatcher
             case 'mytags':
                 $action = new AbonnerTagAction();
                 break;
+            case 'follow-user':
+                $action = new SuivreUtilAction();
+                break;
+            case 'supprimer-touite':
+                $action = new SupprimerTouiteAction();
+                break;
             default:
                 $action = new FeedAction();
                 break;
@@ -85,7 +93,7 @@ class Dispatcher
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"></head>
 <body>
 <header>
-    <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>';
+    <a href="?action=feed&page=1"><img src="images/touiteur.png" alt="logo" /></a>';
 
     if (!isset($_SESSION['user'])) {
         echo '<a href="?action=sign-in"><p>Connexion</p></a>
