@@ -13,19 +13,67 @@ class LikeAction extends Action {
     public function execute(): string
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-            ConnectionFactory::makeConnection();
-            $bdd = ConnectionFactory::$bdd;
-            $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
-            $req->bindValue(":id", $_GET['id']);
-            $result = $req->execute();
-            $ancienneVal = $req->fetchColumn();
+            if (isset($_SESSION['user'])) {
+                ConnectionFactory::makeConnection();
+                $bdd = ConnectionFactory::$bdd;
+                $user = unserialize($_SESSION['user']);
+                $email = $user->__get('email');
 
-            $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
-            $update->bindValue(":id", $_GET['id']);
-            $update->bindValue(":note", $ancienneVal+1);
-            $result = $update->execute();
+                $verifLike = $bdd->prepare("SELECT count(*) FROM alike WHERE emailUtil = :email AND id_touite = :id");
+                $verifLike->bindValue(":email", $email);
+                $verifLike->bindValue(":id", $_GET['id']);
+                $verifLike->execute();
+                $verifieLike = $verifLike->fetchColumn();
+
+                $verifDislike = $bdd->prepare("SELECT count(*) FROM adislike WHERE emailUtil = :email AND id_touite = :id");
+                $verifDislike->bindValue(":email", $email);
+                $verifDislike->bindValue(":id", $_GET['id']);
+                $verifDislike->execute();
+                $verifieDislike = $verifDislike->fetchColumn();
+
+
+                if ($verifieLike == 0 && $verifieDislike == 1) {
+                    $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
+                    $req->bindValue(":id", $_GET['id']);
+                    $result = $req->execute();
+                    $ancienneVal = $req->fetchColumn();
+
+                    $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
+                    $update->bindValue(":id", $_GET['id']);
+                    $update->bindValue(":note", $ancienneVal + 2);
+                    $result = $update->execute();
+
+                    $addUser = $bdd->prepare("INSERT INTO ALIKE VALUES (:email, :id)");
+                    $addUser->bindValue(":email", $email);
+                    $addUser->bindValue(":id", $_GET['id']);
+                    $result = $addUser->execute();
+
+                    $delUser = $bdd->prepare("DELETE FROM ADISLIKE WHERE emailUtil = :email and id_touite = :id");
+                    $delUser->bindValue(":email", $email);
+                    $delUser->bindValue(":id", $_GET['id']);
+                    $result = $delUser->execute();
+
+                } elseif ($verifieLike == 0 && $verifieDislike == 0) {
+                    $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
+                    $req->bindValue(":id", $_GET['id']);
+                    $result = $req->execute();
+                    $ancienneVal = $req->fetchColumn();
+
+                    $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
+                    $update->bindValue(":id", $_GET['id']);
+                    $update->bindValue(":note", $ancienneVal + 1);
+                    $result = $update->execute();
+
+                    $addUser = $bdd->prepare("INSERT INTO ALIKE VALUES (:email, :id)");
+                    $addUser->bindValue(":email", $email);
+                    $addUser->bindValue(":id", $_GET['id']);
+                    $result = $addUser->execute();
+                }
+                header('Location:?action=feed');
+            } else {
+                header('Location:?action=sign-in');
+            }
         }
-        header('Location:?action=feed');
         return " ";
     }
 }

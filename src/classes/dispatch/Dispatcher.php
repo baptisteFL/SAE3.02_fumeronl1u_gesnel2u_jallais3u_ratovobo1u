@@ -48,7 +48,16 @@ class Dispatcher
             case 'display-touite-tag':
                 $action = new DisplayTouiteTagAction();
                 break;
-            case 'myTags' :
+            case 'log-out':
+                $action = new LogoutAction();
+                break;
+            case 'like':
+                $action = new LikeAction();
+                break;
+            case 'dislike':
+                $action = new DislikeAction();
+                break;
+            case 'mytags':
                 $action = new AbonnerTagAction();
                 break;
             default:
@@ -73,9 +82,15 @@ class Dispatcher
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"></head>
 <body>
 <header>
-    <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>
-    <a href="?action=sign-in"><p>Connexion</p></a>
-    <a href="?action=add-user"><p>Inscription</p></a>
+    <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>';
+
+    if (!isset($_SESSION['user'])) {
+        echo '<a href="?action=sign-in"><p>Connexion</p></a>
+    <a href="?action=add-user"><p>Inscription</p></a>';
+    } else {
+        echo '<a href="?action=log-out"><p>Déconnexion</p></a>';
+    }
+    echo '
     <a href="?action=myTags"><p>My tags</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
