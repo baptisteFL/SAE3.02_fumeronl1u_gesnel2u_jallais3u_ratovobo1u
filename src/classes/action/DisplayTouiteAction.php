@@ -13,10 +13,11 @@ class DisplayTouiteAction extends Action
             $bdd = ConnectionFactory::$bdd;
             //afficher un touite en detail
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.date, touite.note
+            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note
                                     from touite, atouite, utilisateur where touite.id_touite = :idTouite
                                                                         and utilisateur.emailUtil = atouite.emailUtil 
-                                                                        and atouite.id_touite = touite.id_touite order by date desc");
+                                                                        and atouite.id_touite = touite.id_touite 
+                                                                        order by touite.datetouite desc");
             $requete->bindValue(":idTouite", $_GET['id_touite']);
             $result = $requete->execute();
             if($result){
