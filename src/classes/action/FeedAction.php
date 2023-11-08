@@ -33,7 +33,7 @@ class FeedAction extends Action
                 if ($result) {
                     while ($row = $req->fetch()) {
                         $html .= '<div class="tweet">
-                    <span id="titleTweet"> ';
+                                    <span id="titleTweet"> ';
                         $req2 = $bdd->prepare("SELECT * FROM utilisateur natural join atouite where id_touite = :idTouite");
                         $req2->bindValue(":idTouite", $row['id_touite']);
                         $result2 = $req2->execute();
@@ -146,11 +146,16 @@ class FeedAction extends Action
     {
         $html = "";
         $html .= '<div class="pagination">';
-        if($page > 1){
-            $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
+        if ($page != 1) {
+            $html .= '<a id="lefta" href="?action=feed&page=' . ($page - 1) . '"><</a>';
+        } else {
+            $html .= '<a id="lefta" href="?action=feed&page=' . $page . '"><</a>';
         }
-        if($page < FeedAction::calculerNombrePage()){
-            $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
+        $html .= '<p>Page '. $page . '</p>';
+        if($page < self::calculerNombrePage()) {
+            $html .= '<a id="righta" href="?action=feed&page=' . ($page + 1) . '">></a>';
+        } else {
+            $html .= '<a id="righta" href="?action=feed&page=' . $page . '">></a>';
         }
         $html .= '</div>';
         return $html;

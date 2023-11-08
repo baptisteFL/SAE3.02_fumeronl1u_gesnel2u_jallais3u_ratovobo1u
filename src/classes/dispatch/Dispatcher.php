@@ -64,9 +64,6 @@ class Dispatcher
             case 'mytags':
                 $action = new AbonnerTagAction();
                 break;
-            case 'supprimer-touite':
-                $action = new SupprimerTouiteAction();
-                break;
             default:
                 $action = new FeedAction();
                 break;

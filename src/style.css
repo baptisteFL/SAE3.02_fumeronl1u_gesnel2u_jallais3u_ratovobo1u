@@ -1,7 +1,9 @@
 body {
+    display: flex;
+    flex-direction: column;
     font-family: Roboto, sans-serif;
     background-color: #f0f0f0;
-    margin: 0;
+    margin: auto;
     padding: 0;
 }
 
@@ -61,6 +63,7 @@ button {
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    margin-right: 0.3vw;
 }
 
 button:hover {
@@ -80,7 +83,7 @@ header > a {
     justify-items: center;
     align-content: center;
     max-width: 30%;
-    margin: 10vh auto;
+    margin: 10vh;
 }
 
 #signin > h1 {
@@ -159,7 +162,7 @@ header > a {
     flex-direction: column;
     justify-items: center;
     align-content: center;
-    max-width: 50%;
+    min-width: 50%;
     margin: 10vh auto;
 }
 
@@ -175,4 +178,50 @@ header > a {
 
 #submitTouite:hover {
     background-color: #0079b8;
+}
+
+#grayed {
+    background-color: #888888;
+}
+
+#grayed:hover {
+    background-color: #555555;
+}
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    flex-basis: auto;
+    margin: auto;
+    margin-top: 3vh;
+}
+
+.pagination > p {
+    margin: 0;
+}
+
+.pagination > * {
+    padding: 1.5vh 1vw;
+    background-color: #00aced;
+    color: white;
+}
+
+.pagination > a {
+    text-decoration: none;
+    background-color: white;
+    color: black;
+}
+
+.pagination > a:hover {
+    box-shadow: 0 0 5px #999;
+}
+
+#lefta {
+    border-bottom-left-radius: 20%;
+    border-top-left-radius: 20%;
+}
+
+#righta {
+    border-bottom-right-radius: 20%;
+    border-top-right-radius: 20%;
 }
