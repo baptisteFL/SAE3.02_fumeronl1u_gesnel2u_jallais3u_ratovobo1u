@@ -22,7 +22,6 @@ class TouiteAction extends Action
             $html .= '
         <form method="post" action="" class="tweet" id="formTouite">
             <input type="text" name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
-            <input type="text" name="tag" id="tag" placeholder="tag1;tag2"><br>
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
             ';

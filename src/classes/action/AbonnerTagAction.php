@@ -47,7 +47,7 @@ class AbonnerTagAction {
                     $html .= "<br>$libelleTag<br>";
                 }
             }else {
-                header('Location:?action=signup');
+                header('Location:?action=sign-in');
             }
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // fonctionnalité pour rechercher un tag
@@ -73,7 +73,7 @@ class AbonnerTagAction {
                 $insert->bindValue(1, $email);
                 $insert->bindValue(2, $id_tag);
                 $insert->execute();
-                header('Location:?action=myTags');
+                header('Location:?action=mytags');
             } else {
                 $html .= "<br>le tag n'existe pas<br>";
             }

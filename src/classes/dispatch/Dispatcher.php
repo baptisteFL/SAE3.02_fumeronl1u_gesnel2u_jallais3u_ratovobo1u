@@ -91,7 +91,7 @@ class Dispatcher
         echo '<a href="?action=log-out"><p>Déconnexion</p></a>';
     }
     echo '
-    <a href="?action=myTags"><p>My tags</p></a>
+    <a href="?action=mytags"><p>My tags</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
 </header>';
