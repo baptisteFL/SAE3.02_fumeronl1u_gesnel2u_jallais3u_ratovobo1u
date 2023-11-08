@@ -24,7 +24,7 @@ class DisplayTouiteAction extends Action
                 while($row = $requete->fetch()){
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
+                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&amilUtil={$row['emailUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
                     $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
