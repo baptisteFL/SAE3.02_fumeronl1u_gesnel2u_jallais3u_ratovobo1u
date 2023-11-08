@@ -32,8 +32,8 @@ class FeedAction extends Action
                                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row2['emailUtil']}'>" . $row2['prenomUtil'] . ' ' . $row2['nomUtil'] . "</a>" . '</div>';
                             }
                         }
-                        $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
-                    </span>';
+                        $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user'>" . "Suivre" ."</a></button></div>
+                    </span>";
                         $html .= '<div class="timestamp">' . "Il y a " . $this->calculerDepuisQuand($row['id_touite']) . '</div>';
                         $html .= '<div class="content">' . $row['texte'] . '</div>';
                         $html .= '<div class="tags">';

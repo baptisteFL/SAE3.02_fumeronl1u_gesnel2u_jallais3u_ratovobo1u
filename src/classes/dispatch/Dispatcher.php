@@ -12,6 +12,7 @@ use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\DisplayTouiteTagAction;
 use iutnc\touiteur\action\DisplayTouiteAction;
+use iutnc\touiteur\action\FollowAction;
 
 require_once "vendor/autoload.php";
 
@@ -49,6 +50,9 @@ class Dispatcher
                 break;
             case 'display-touite':
                 $action = new DisplayTouiteAction();
+                break;
+            case 'follow-user':
+                $action = new FollowAction();
                 break;
             default:
                 $action = new FeedAction();
