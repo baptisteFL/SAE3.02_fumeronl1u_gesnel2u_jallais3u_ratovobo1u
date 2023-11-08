@@ -13,7 +13,7 @@ class DisplayTouiteAction extends Action
             $bdd = ConnectionFactory::$bdd;
             //afficher un touite en detail
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note
+            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.emailUtil, utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note
                                     from touite, atouite, utilisateur where touite.id_touite = :idTouite
                                                                         and utilisateur.emailUtil = atouite.emailUtil 
                                                                         and atouite.id_touite = touite.id_touite 
@@ -24,7 +24,7 @@ class DisplayTouiteAction extends Action
                 while($row = $requete->fetch()){
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
+                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
                     $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
