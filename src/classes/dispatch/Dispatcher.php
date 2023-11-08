@@ -2,6 +2,7 @@
 
 namespace iutnc\touiteur\dispatch;
 
+use iutnc\touiteur\action\AbonnerTagAction;
 use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\DislikeAction;
 use iutnc\touiteur\action\FeedAction;
@@ -12,7 +13,6 @@ use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\DisplayTouiteTagAction;
 use iutnc\touiteur\action\DisplayTouiteAction;
-use iutnc\touiteur\action\FollowAction;
 
 require_once "vendor/autoload.php";
 
@@ -51,8 +51,17 @@ class Dispatcher
             case 'display-touite':
                 $action = new DisplayTouiteAction();
                 break;
-            case 'follow-user':
-                $action = new FollowAction();
+            case 'log-out':
+                $action = new LogoutAction();
+                break;
+            case 'like':
+                $action = new LikeAction();
+                break;
+            case 'dislike':
+                $action = new DislikeAction();
+                break;
+            case 'mytags':
+                $action = new AbonnerTagAction();
                 break;
             default:
                 $action = new FeedAction();
@@ -76,9 +85,16 @@ class Dispatcher
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet"></head>
 <body>
 <header>
-    <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>
-    <a href="?action=sign-in"><p>Connexion</p></a>
-    <a href="?action=add-user"><p>Inscription</p></a>
+    <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>';
+
+    if (!isset($_SESSION['user'])) {
+        echo '<a href="?action=sign-in"><p>Connexion</p></a>
+    <a href="?action=add-user"><p>Inscription</p></a>';
+    } else {
+        echo '<a href="?action=log-out"><p>Déconnexion</p></a>';
+    }
+    echo '
+    <a href="?action=mytags"><p>My tags</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
 </header>';

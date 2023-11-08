@@ -20,7 +20,7 @@ class ConnectionFactory{
     public static function makeConnection(){
         try{
             self::setConfig("db.config.ini");
-            $bdd = @new PDO(self::$configTab['dsn'], self::$configTab['user'], self::$configTab['password']);
+            $bdd = @new PDO("mysql:host=localhost;dbname=".self::$configTab['dsn'], self::$configTab['user'], self::$configTab['password']);
             $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$bdd = $bdd;
         }catch(Exception $e){

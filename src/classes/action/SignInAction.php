@@ -10,7 +10,10 @@ require_once "vendor/autoload.php";
 
 class SignInAction extends Action
 {
-
+    /**
+     * Methode qui permet à utilisateur de s'authentifier
+     * @return string : imprime si l'authentification est réussi ou non
+     */
 
     public function execute(): string
     {

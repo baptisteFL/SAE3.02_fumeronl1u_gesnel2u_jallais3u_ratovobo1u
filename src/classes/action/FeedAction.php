@@ -15,7 +15,7 @@ class FeedAction extends Action
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM touite order by date desc");
+        $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc");
         $html = "";
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
@@ -39,7 +39,6 @@ class FeedAction extends Action
                         $html .= '<div class="tags">';
                         $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
                         $req3->bindValue(":idTouite", $row['id_touite']);
-
                         $result3 = $req3->execute();
                         if ($result3) {
                             while ($row3 = $req3->fetch()) {
@@ -58,7 +57,7 @@ class FeedAction extends Action
                 }
             } catch
             (Exception $e) {
-                $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
+                $html .= "<br> Erreur !<br>";
             }
         }
         return $html . '
@@ -105,7 +104,7 @@ class FeedAction extends Action
         $result = $req->execute();
         if ($result) {
             while ($row = $req->fetch()) {
-                $date = $row['date'];
+                $date = $row['dateTouite'];
             }
         }
         $date = new DateTime($date);
@@ -123,6 +122,8 @@ class FeedAction extends Action
             return $interval->i . " minutes";
         } else if ($interval->s > 0) {
             return $interval->s . " secondes";
+        }else{
+            return "0 secondes";
         }
     }
 }
