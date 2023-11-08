@@ -47,6 +47,9 @@ class Dispatcher
             case 'display-touite-tag':
                 $action = new DisplayTouiteTagAction();
                 break;
+            case 'display-touite':
+                $action = new DisplayTouiteAction();
+                break;
             default:
                 $action = new FeedAction();
                 break;
