@@ -6,12 +6,12 @@ use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\DislikeAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\LikeAction;
-use iutnc\touiteur\action\SignIn;
+use iutnc\touiteur\action\SignInAction;
 use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\DisplayTouiteTagAction;
-use iutnc\touiteur\action\DisplayTouite;
+use iutnc\touiteur\action\DisplayTouiteAction;
 
 require_once "vendor/autoload.php";
 
@@ -33,7 +33,7 @@ class Dispatcher
                 $action = new AddUserAction();
                 break;
             case 'sign-in':
-                $action = new SignIn();
+                $action = new SignInAction();
                 break;
             case 'user-page':
                 $action = new UserPageAction();

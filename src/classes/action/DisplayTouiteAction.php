@@ -5,7 +5,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\db\ConnectionFactory;
 
-class DisplayTouite extends Action
+class DisplayTouiteAction extends Action
 {
         public function execute() : string
         {

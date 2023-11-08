@@ -4,7 +4,7 @@ namespace iutnc\touiteur\action;
 
 require_once "vendor/autoload.php";
 
-class SuivreUtil extends Action {
+class SuivreUtilAction extends Action {
 
     public function execute(): string {
 
