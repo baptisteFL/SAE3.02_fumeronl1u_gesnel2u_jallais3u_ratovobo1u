@@ -36,7 +36,7 @@ class SuivreUtilAction extends Action {
 
             $html = "<p>Vous suivez {$abonnement}</p>";
         } else {
-            header('Location :?action=signin');
+            header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";
         }
 
