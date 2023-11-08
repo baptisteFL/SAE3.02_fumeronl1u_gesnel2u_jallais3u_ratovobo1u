@@ -3,8 +3,6 @@
 namespace iutnc\touiteur\action;
 
 use DateTime;
-use iutnc\touiteur\auth\Auth;
-use iutnc\touiteur\auth\AuthException;
 use iutnc\touiteur\db\ConnectionFactory;
 use Exception;
 
@@ -31,7 +29,7 @@ class FeedAction extends Action
                         $result2 = $req2->execute();
                         if ($result2) {
                             while ($row2 = $req2->fetch()) {
-                                $html .= '<div class="author">'."<a href='?action=display-touite-user&nomUtil={$row2['nomUtil']}'>" . $row2['prenomUtil'] . ' ' .$row2['nomUtil'] ."</a>". '</div>';
+                                $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row2['emailUtil']}'>" . $row2['prenomUtil'] . ' ' . $row2['nomUtil'] . "</a>" . '</div>';
                             }
                         }
                         $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
@@ -41,12 +39,14 @@ class FeedAction extends Action
                         $html .= '<div class="tags">';
                         $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
                         $req3->bindValue(":idTouite", $row['id_touite']);
+
                         $result3 = $req3->execute();
                         if ($result3) {
                             while ($row3 = $req3->fetch()) {
-                                $html .= '<p class="trending">'."<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>".'#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';
+                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                             }
                         }
+                        $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                         $html .= '</div>';
                         $html .= '<div class="actions">
         <a href="?action=like&id=' . $row['id_touite'] . '"><button id = "like">Like</button></a>
@@ -56,7 +56,7 @@ class FeedAction extends Action
 </div>';
                     }
                 }
-            }catch
+            } catch
             (Exception $e) {
                 $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
             }
@@ -67,6 +67,11 @@ class FeedAction extends Action
     </a>';
     }
 
+    /**
+     * methode qui permet de calculer le nombre de touite par tag
+     * @param int $idTag
+     * @return int
+     */
 
     public static function calculerNombreTouiteParTag(int $idTag): int
     {
@@ -84,7 +89,15 @@ class FeedAction extends Action
         return $i;
     }
 
-    public static function calculerDepuisQuand($id_touite){
+    /**
+     * methode qui permet de calculer depuis combien de temps un touite a été posté
+     * @param $id_touite
+     * @return string
+     * @throws Exception
+     */
+
+    public static function calculerDepuisQuand($id_touite)
+    {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         $req = $bdd->prepare("SELECT * FROM touite WHERE id_touite = :idTouite");
@@ -98,18 +111,18 @@ class FeedAction extends Action
         $date = new DateTime($date);
         $now = new DateTime();
         $interval = $now->diff($date);
-        if($interval->y > 0){
-            return $interval->y." ans";
-        }else if($interval->m > 0){
-            return $interval->m." mois";
-        }else if($interval->d > 0){
-            return $interval->d." jours";
-        }else if($interval->h > 0){
-            return $interval->h." heures";
-        }else if($interval->i > 0){
-            return $interval->i." minutes";
-        }else if($interval->s > 0){
-            return $interval->s." secondes";
+        if ($interval->y > 0) {
+            return $interval->y . " ans";
+        } else if ($interval->m > 0) {
+            return $interval->m . " mois";
+        } else if ($interval->d > 0) {
+            return $interval->d . " jours";
+        } else if ($interval->h > 0) {
+            return $interval->h . " heures";
+        } else if ($interval->i > 0) {
+            return $interval->i . " minutes";
+        } else if ($interval->s > 0) {
+            return $interval->s . " secondes";
         }
     }
 }

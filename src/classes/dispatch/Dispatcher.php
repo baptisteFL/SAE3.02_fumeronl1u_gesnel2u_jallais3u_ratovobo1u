@@ -11,6 +11,7 @@ use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\DisplayTouiteTagAction;
+use iutnc\touiteur\action\DisplayTouite;
 
 require_once "vendor/autoload.php";
 
@@ -46,12 +47,6 @@ class Dispatcher
             case 'display-touite-tag':
                 $action = new DisplayTouiteTagAction();
                 break;
-            case 'like':
-                $action = new LikeAction();
-                break;
-            case 'dislike':
-                $action = new DislikeAction();
-                break;
             default:
                 $action = new FeedAction();
                 break;
@@ -77,7 +72,6 @@ class Dispatcher
     <a href="?action=feed"><img src="images/touiteur.png" alt="logo" /></a>
     <a href="?action=sign-in"><p>Connexion</p></a>
     <a href="?action=add-user"><p>Inscription</p></a>
-    <a href="?action=mytags"><p>Mes tags</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
 </header>';

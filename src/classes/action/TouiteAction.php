@@ -17,10 +17,12 @@ class TouiteAction extends Action
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $html .= '
         <form method="post" action="" class="tweet" id="formTouite">
-            <input name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
+            <input type="text" name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
+            <input type="text" name="tag" id="tag" placeholder="tag1;tag2"><br>
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
             ';
+            //$html .= unserialize($_SESSION['user'])->__get('email');
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_SESSION['user'])) {
                 $user = unserialize($_SESSION['user']);
