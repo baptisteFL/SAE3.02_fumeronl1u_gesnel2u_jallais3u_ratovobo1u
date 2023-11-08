@@ -28,6 +28,16 @@ class UserPageAction extends Action
                         }
                     }
                     $html .= "<br> AFFICHER TWEETS<br>";
+                    //affichage des touites des personnes suivies
+                    /*
+                     * select touite.id_touite, touite.texte, utilisateur.prenomUtil, utilisateur.nomUtil
+                     * from utilisateur, touite, atouite, suivis
+                     * where emailUtilA='BaptisteFL@mail.com' and atouite.emailUtil='BastienJ@mail.com'
+                     * and utilisateur.emailUtil = atouite.emailUtil and atouite.id_touite = touite.id_touite
+                     * and suivis.emailUtilA= utilisateur.emailUtil and suivis.emailUtilB = utilisateur.emailUtil;
+                     */
+
+
                     $html .= "<br> AFFICHER FOLLOWERS<br>";
                 }catch (\Exception $e){
                     $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";

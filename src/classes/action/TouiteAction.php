@@ -22,7 +22,7 @@ class TouiteAction extends Action
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
             ';
-            $html .= unserialize($_SESSION['user'])->__get('email');
+            //$html .= unserialize($_SESSION['user'])->__get('email');
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_SESSION['user'])) {
                 $user = unserialize($_SESSION['user']);
