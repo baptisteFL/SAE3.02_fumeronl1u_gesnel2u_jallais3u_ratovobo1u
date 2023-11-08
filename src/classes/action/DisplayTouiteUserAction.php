@@ -4,6 +4,8 @@ namespace iutnc\touiteur\action;
 
 
 use iutnc\touiteur\db\ConnectionFactory;
+use iutnc\touiteur\action\FeedAction;
+use PDO;
 
 class DisplayTouiteUserAction extends Action
 {
@@ -11,6 +13,17 @@ class DisplayTouiteUserAction extends Action
         {
             ConnectionFactory::makeConnection();
             $bdd = ConnectionFactory::$bdd;
+            //gestion de la pagination
+            $limite = 10;
+            $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+            $page = $_GET['page'];
+
+            $decalage = ($page - 1) * $limite;
+
+            $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc LIMIT :limite OFFSET :decalage");
+            $req->bindValue(":limite", $limite, PDO::PARAM_INT);
+            $req->bindValue(":decalage", $decalage, PDO::PARAM_INT);
+
             //afficher les touites de l'utilisateur a partir de son mail
             $html = "";
             $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil 
@@ -23,8 +36,8 @@ class DisplayTouiteUserAction extends Action
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
                     $html .= '<div class="author">'. "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
-                    $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
-                    </span>';
+                    $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'>Suivre</a></button></div>
+                    </span>";
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                     $html .= '<div class="content">' . $row['texte'] . '</div>';
 
@@ -49,6 +62,7 @@ class DisplayTouiteUserAction extends Action
                         </div>';
                 }
             }
+            $html .= FeedAction::genererPagination($page, 'display-touite-user');
             return $html;
         }
 

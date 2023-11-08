@@ -2,6 +2,8 @@
 
 namespace iutnc\touiteur\action;
 
+use iutnc\touiteur\db\ConnectionFactory;
+
 require_once "vendor/autoload.php";
 
 class SuivreUtilAction extends Action {
@@ -17,24 +19,20 @@ class SuivreUtilAction extends Action {
 
         if(isset($_SESSION['user'])){
             try{
-                $connexion = new PDO('mysql:host=localhost; dbname=sae; charset=utf8','root','');
+                ConnectionFactory::makeConnection();
+                $bdd = ConnectionFactory::$bdd;
             } catch(Exception $e){
                 die('erreur :'.$e->getMessage());
             }
             // on récupère le mail de celui qui s'abonne et de la l'abonnement
-            $abonner = $_SESSION['user'];
-            $abonnement = "SELECT email from atouite where id_touite = ?";
-            $requeteAbonnement = $connexion->prepare($abonnement);
-            $requeteAbonnement->bindParam(1, );
+            $emailUtil = unserialize($_SESSION['user'])->__get('email');
+            $emailSuivi = $_GET['emailSuivi'];
+            $req = $bdd->prepare("INSERT INTO suivis VALUES (:emailUtil, :emailSuivi)");
+            $req->bindValue(":emailUtil", $emailUtil);
+            $req->bindValue(":emailSuivi", $emailSuivi);
+            $result = $req->execute();
 
-            // on insère dans la base de donnée
-            $insert  = "INSERT INTO suivis(emailUtilA, emailUtilB) VALUES (?, ?)";
-            $requeteInsert = $connexion->prepare($insert);
-            $requeteInsert->bindParam(1, $abonner);
-            $requeteInsert->bindParam(2, );
-            $requeteInsert->execute();
-
-            $html = "<p>Vous suivez {$abonnement}</p>";
+            $html = "<p>Vous suivez {$emailSuivi}</p>";
         } else {
             header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";

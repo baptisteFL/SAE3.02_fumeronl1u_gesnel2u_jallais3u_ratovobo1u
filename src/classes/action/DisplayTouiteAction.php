@@ -25,8 +25,8 @@ class DisplayTouiteAction extends Action
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
                     $html .= '<div class="author">'. "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
-                    $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
-                    </span>';
+                    $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'>Suivre</a></button></div>
+                    </span>";
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                     $html .= '<div class="content">' . $row['texte'] . '</div>';
                     $html .= '<div class="note">' . "Score : " . $row['note'] . '</div>';

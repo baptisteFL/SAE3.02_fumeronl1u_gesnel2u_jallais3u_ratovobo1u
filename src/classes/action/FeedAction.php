@@ -19,7 +19,8 @@ class FeedAction extends Action
 
 
         $limite = 10;
-        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $page = $_GET['page'];
 
         $decalage = ($page - 1) * $limite;
 
@@ -37,13 +38,15 @@ class FeedAction extends Action
                         $req2 = $bdd->prepare("SELECT * FROM utilisateur natural join atouite where id_touite = :idTouite");
                         $req2->bindValue(":idTouite", $row['id_touite']);
                         $result2 = $req2->execute();
+                        $mail = "";
                         if ($result2) {
                             while ($row2 = $req2->fetch()) {
                                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row2['emailUtil']}'>" . $row2['prenomUtil'] . ' ' . $row2['nomUtil'] . "</a>" . '</div>';
+                                $mail = $row2['emailUtil'];
                             }
                         }
-                        $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
-                    </span>';
+                        $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$mail}'>Suivre</a></button></div>
+                    </span>";
                         if($this->estMonTouite($row['id_touite'])){
                             $html .= '<div class="actions" id="delete"><a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button>Supprimer</button></a></div>';
                         }
@@ -142,13 +145,30 @@ class FeedAction extends Action
         }
     }
 
-    public static function genererPagination($page)
+    public static function genererPagination($page, string $action = "feed"): string
     {
         $html = "";
-        $html .= '<div class="pagination">';
-        $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
-        $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
-        $html .= '</div>';
+        switch ($action){
+            case "display-touite-user":
+                $html .= '<div class="pagination">';
+                $html .= '<a href="?action=display-touite-user&page=' . ($page - 1) . '">&laquo;</a>';
+                $html .= '<a href="?action=display-touite-user&page=' . ($page + 1) . '">&raquo;</a>';
+                $html .= '</div>';
+                break;
+            case "display-touite-tag":
+                $html .= '<div class="pagination">';
+                $html .= '<a href="?action=display-touite-tag&page=' . ($page - 1) . '">&laquo;</a>';
+                $html .= '<a href="?action=display-touite-tag&page=' . ($page + 1) . '">&raquo;</a>';
+                $html .= '</div>';
+                break;
+            default :
+                $html = "";
+                $html .= '<div class="pagination">';
+                $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
+                $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
+                $html .= '</div>';
+                break;
+        }
         return $html;
     }
 
