@@ -21,12 +21,15 @@ class DisplayTouiteTagAction extends Action
                                         and atouite.emailUtil = utilisateur.emailUtil
                                         and atouite.id_touite = touite.id_touite;");
         $requete->bindValue(":libelle", $_GET['libelleTag']);
+
+        //afficher les touites associés au tag
         $result = $requete->execute();
         if ($result) {
             while ($row = $requete->fetch()) {
+                //
                 $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                $html .= '<div class="author">' ."<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
+                $html .= '<div class="author">' . "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
                 $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
@@ -39,7 +42,8 @@ class DisplayTouiteTagAction extends Action
                 $result3 = $req3->execute();
                 if ($result3) {
                     while ($row3 = $req3->fetch()) {
-                        $html .= '<p class="trending">'."<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>".'#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';                    }
+                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';
+                    }
                 }
                 $html .= '</div>';
                 $html .= '<div class="actions">
