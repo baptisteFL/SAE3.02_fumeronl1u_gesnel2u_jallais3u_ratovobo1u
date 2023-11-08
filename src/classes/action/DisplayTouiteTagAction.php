@@ -13,7 +13,7 @@ class DisplayTouiteTagAction extends Action
         $bdd = ConnectionFactory::$bdd;
         //afficher les touites de l'utilisateur
         $html = "";
-        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite
+        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil
                                         FROM touite, tag, touitepartag, utilisateur, atouite 
                                         where libelleTag= :libelle 
                                         and touite.id_touite=touitepartag.id_touite 
@@ -30,7 +30,7 @@ class DisplayTouiteTagAction extends Action
                 //
                 $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                $html .= '<div class="author">' . "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
+                $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
                 $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
