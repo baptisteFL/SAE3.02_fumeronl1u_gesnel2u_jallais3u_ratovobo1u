@@ -13,10 +13,15 @@ class UserPageAction extends Action
         {
             ConnectionFactory::makeConnection();
             $bdd = ConnectionFactory::$bdd;
-            $user = unserialize($_SESSION['user']);
+            $html = "";
+            if(isset($_SESSION['user'])){
+                $user = unserialize($_SESSION['user']);
+            }else{
+                $html .= "<br> Vous n'êtes pas connecté !<br>";
+                return $html;
+            }
             $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
             $req->bindValue(":email", $user->__get('email'));
-            $html = "";
             if($_SERVER['REQUEST_METHOD'] == 'GET'){
                 try{
                     $result = $req->execute();
