@@ -54,7 +54,7 @@ class TouiteAction extends Action
                             $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, dateTouite,note, cheminIm) VALUES (:id, :texte, :date, :note, :chemin)");
                             $nouvelleId = self::trouverNouveauId();
                             $req->bindValue(":id", $nouvelleId);
-                            $req->bindValue(":texte", self::retirerHastag($texte));
+                            $req->bindValue(":texte", $texte);
                             $req->bindValue(":date", date("Y-m-d H:i:s"));
                             $req->bindValue(":note", 0);
                             $req->bindValue(":chemin", $fileclient);
@@ -63,7 +63,7 @@ class TouiteAction extends Action
                             $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, dateTouite,note) VALUES (:id, :texte, :date, :note)");
                             $nouvelleId = self::trouverNouveauId();
                             $req->bindValue(":id", $nouvelleId);
-                            $req->bindValue(":texte", self::retirerHastag($texte));
+                            $req->bindValue(":texte", $texte);
                             $req->bindValue(":date", date("Y-m-d H:i:s"));
                             $req->bindValue(":note", 0);
                             $result = $req->execute();
@@ -95,7 +95,7 @@ class TouiteAction extends Action
                             }
                         }
 
-                header('Location:?action=feed');
+                header('Location:?action=feed&page=1');
             }else{
                 $html .= "<br> Vous n'êtes pas connecté !<br>";
             }
@@ -185,20 +185,5 @@ class TouiteAction extends Action
             $tags[0] = "";
         }
         return $tags;
-    }
-
-    /** fonction qui permet de retirer un hastag
-     * @param $texte
-     * @return string
-     */
-    public static function retirerHastag($texte){
-        $mots = explode(" ", $texte);
-        $nouveauTexte = "";
-        foreach($mots as $mot){
-            if(substr($mot, 0, 1) != "#"){
-                $nouveauTexte .= $mot . " ";
-            }
-        }
-        return $nouveauTexte;
     }
 }
