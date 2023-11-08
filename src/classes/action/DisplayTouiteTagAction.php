@@ -19,7 +19,8 @@ class DisplayTouiteTagAction extends Action
                                         and touite.id_touite=touitepartag.id_touite 
                                         and tag.id_tag=touitepartag.id_tag
                                         and atouite.emailUtil = utilisateur.emailUtil
-                                        and atouite.id_touite = touite.id_touite;");
+                                        and atouite.id_touite = touite.id_touite
+                                        ORDER BY touite.datetouite DESC;");
         $requete->bindValue(":libelle", $_GET['libelleTag']);
 
         //afficher les touites associés au tag

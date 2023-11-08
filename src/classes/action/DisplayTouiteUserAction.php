@@ -15,7 +15,7 @@ class DisplayTouiteUserAction extends Action
             $html = "";
             $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil 
                                             FROM touite natural join atouite natural join utilisateur 
-                                            WHERE utilisateur.emailUtil = :emailUtil ORDER BY touite.date DESC");
+                                            WHERE utilisateur.emailUtil = :emailUtil ORDER BY touite.datetouite DESC");
             $requete->bindValue(":emailUtil", $_GET['emailUtil']);
             $result = $requete->execute();
             if($result){
