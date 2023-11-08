@@ -4,6 +4,7 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\auth\Auth;
 use iutnc\touiteur\auth\AuthException;
+use iutnc\touiteur\db\User;
 
 require_once "vendor/autoload.php";
 

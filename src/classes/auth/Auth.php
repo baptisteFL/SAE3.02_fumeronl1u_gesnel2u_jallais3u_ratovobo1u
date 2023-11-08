@@ -58,6 +58,7 @@ class Auth
         $req->bindValue(":nom", $nom);
         $req->bindValue(":prenom", $prenom);
         $result = $req->execute();
+        $_SESSION['user'] = serialize(new User($email, $passwordHash));
         if (!$result) {
             echo "<br> L'inscription a échoué <br>";
             throw new AuthException("L'inscription a échoué");

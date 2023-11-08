@@ -18,11 +18,9 @@ class TouiteAction extends Action
             $html .= '
         <form method="post" action="" class="tweet" id="formTouite">
             <input type="text" name="texte" id="text" placeholder="Quoi de neuf ?" maxlength="235"><br>
-            <input type="text" name="tag" id="tag" placeholder="tag1;tag2"><br>
             <input type="submit" id="submitTouite" value="Envoyer">
         </form>
             ';
-            $html .= unserialize($_SESSION['user'])->__get('email');
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_SESSION['user'])) {
                 $user = unserialize($_SESSION['user']);
@@ -32,7 +30,7 @@ class TouiteAction extends Action
                 $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, date,note) VALUES (:id, :texte, :date, :note)");
                 $nouvelleId = self::trouverNouveauId();
                 $req->bindValue(":id", $nouvelleId);
-                $req->bindValue(":texte", $texte);
+                $req->bindValue(":texte", self::retirerHastag($texte));
                 $req->bindValue(":date", date("Y-m-d H:i:s"));
                 $req->bindValue(":note", 0);
                 $result = $req->execute();
@@ -43,7 +41,7 @@ class TouiteAction extends Action
                 $result2 = $req2->execute();
                 $req3 = $bdd->prepare("INSERT INTO tag (id_tag, libelleTag) VALUES (:idTag, :libelleTag)");
                 $req4 = $bdd->prepare("INSERT INTO touitepartag (id_tag, id_touite) VALUES (:idTag, :idTouite)");
-                $tags = explode(";", $_POST['tag']);
+                $tags = self::extraireHastag($texte);
                 if($tags[0] == ""){
                     $tags = [];
                 }
@@ -117,5 +115,27 @@ class TouiteAction extends Action
             }
         }
         return false;
+    }
+
+    public static function extraireHastag($texte){
+        $tags = [];
+        $mots = explode(" ", $texte);
+        foreach($mots as $mot){
+            if(substr($mot, 0, 1) == "#"){
+                $tags[] = substr($mot, 1);
+            }
+        }
+        return $tags;
+    }
+
+    public static function retirerHastag($texte){
+        $mots = explode(" ", $texte);
+        $nouveauTexte = "";
+        foreach($mots as $mot){
+            if(substr($mot, 0, 1) != "#"){
+                $nouveauTexte .= $mot . " ";
+            }
+        }
+        return $nouveauTexte;
     }
 }
