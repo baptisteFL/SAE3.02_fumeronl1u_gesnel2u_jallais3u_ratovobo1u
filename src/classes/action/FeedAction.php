@@ -5,6 +5,7 @@ namespace iutnc\touiteur\action;
 use DateTime;
 use iutnc\touiteur\db\ConnectionFactory;
 use Exception;
+use PDO;
 
 require_once "vendor/autoload.php";
 
@@ -15,7 +16,16 @@ class FeedAction extends Action
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc");
+
+
+        $limite = 10;
+        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+
+        $decalage = ($page - 1) * $limite;
+
+        $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc LIMIT :limite OFFSET :decalage");
+        $req->bindValue(":limite", $limite, PDO::PARAM_INT);
+        $req->bindValue(":decalage", $decalage, PDO::PARAM_INT);
         $html = "";
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
@@ -39,13 +49,13 @@ class FeedAction extends Action
                         $html .= '<div class="tags">';
                         $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
                         $req3->bindValue(":idTouite", $row['id_touite']);
-
                         $result3 = $req3->execute();
                         if ($result3) {
                             while ($row3 = $req3->fetch()) {
                                 $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                             }
                         }
+                        //permet d'afficher plus d'informations sur le touite
                         $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                         $html .= '</div>';
                         $html .= '<div class="actions">
@@ -56,6 +66,7 @@ class FeedAction extends Action
 </div>';
                     }
                 }
+                $html .= $this->genererPagination($page);
             } catch
             (Exception $e) {
                 $html .= "<br> Erreur !<br>";
@@ -126,5 +137,15 @@ class FeedAction extends Action
         }else{
             return "0 secondes";
         }
+    }
+
+    public static function genererPagination($page)
+    {
+        $html = "";
+        $html .= '<div class="pagination">';
+        $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
+        $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
+        $html .= '</div>';
+        return $html;
     }
 }

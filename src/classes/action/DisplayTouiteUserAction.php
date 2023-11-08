@@ -13,9 +13,9 @@ class DisplayTouiteUserAction extends Action
             $bdd = ConnectionFactory::$bdd;
             //afficher les touites de l'utilisateur a partir de son mail
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.date, utilisateur.emailUtil 
+            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil 
                                             FROM touite natural join atouite natural join utilisateur 
-                                            WHERE utilisateur.emailUtil = :emailUtil ORDER BY touite.date DESC");
+                                            WHERE utilisateur.emailUtil = :emailUtil ORDER BY touite.datetouite DESC");
             $requete->bindValue(":emailUtil", $_GET['emailUtil']);
             $result = $requete->execute();
             if($result){
@@ -38,6 +38,8 @@ class DisplayTouiteUserAction extends Action
                             $html .= '<p class="trending">'."<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>".'#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';
                         }
                     }
+                    //permet d'afficher plus d'informations sur le touite
+                    $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                     $html .= '</div>';
                     $html .= '<div class="actions">
                                 <button id = "like">Like</button>

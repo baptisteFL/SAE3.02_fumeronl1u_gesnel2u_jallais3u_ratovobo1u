@@ -13,13 +13,14 @@ class DisplayTouiteTagAction extends Action
         $bdd = ConnectionFactory::$bdd;
         //afficher les touites de l'utilisateur
         $html = "";
-        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.date 
+        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil
                                         FROM touite, tag, touitepartag, utilisateur, atouite 
                                         where libelleTag= :libelle 
                                         and touite.id_touite=touitepartag.id_touite 
                                         and tag.id_tag=touitepartag.id_tag
                                         and atouite.emailUtil = utilisateur.emailUtil
-                                        and atouite.id_touite = touite.id_touite;");
+                                        and atouite.id_touite = touite.id_touite
+                                        ORDER BY touite.datetouite DESC;");
         $requete->bindValue(":libelle", $_GET['libelleTag']);
 
         //afficher les touites associés au tag
@@ -29,7 +30,7 @@ class DisplayTouiteTagAction extends Action
                 //
                 $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                $html .= '<div class="author">' . "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
+                $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
                 $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
                     </span>';
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
@@ -42,9 +43,11 @@ class DisplayTouiteTagAction extends Action
                 $result3 = $req3->execute();
                 if ($result3) {
                     while ($row3 = $req3->fetch()) {
-                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '<p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</a></p></p>';
+                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                     }
                 }
+                //permet d'afficher plus d'informations sur le touite
+                $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                 $html .= '</div>';
                 $html .= '<div class="actions">
                                 <button id = "like">Like</button>
