@@ -146,8 +146,12 @@ class FeedAction extends Action
     {
         $html = "";
         $html .= '<div class="pagination">';
-        $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
-        $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
+        if($page > 1){
+            $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
+        }
+        if($page < FeedAction::calculerNombrePage()){
+            $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
+        }
         $html .= '</div>';
         return $html;
     }
@@ -169,5 +173,15 @@ class FeedAction extends Action
             }
         }
         return false;
+    }
+
+    public static function calculerNombrePage()
+    {
+        ConnectionFactory::makeConnection();
+        $bdd = ConnectionFactory::$bdd;
+        $req = $bdd->prepare("SELECT count(*) FROM touite");
+        $result = $req->execute();
+        $nombreTouite = $req->fetchColumn();
+        return ceil($nombreTouite / 10);
     }
 }
