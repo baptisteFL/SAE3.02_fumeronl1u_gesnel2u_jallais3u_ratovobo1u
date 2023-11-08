@@ -10,6 +10,10 @@ require_once "vendor/autoload.php";
 
 class TouiteAction extends Action
 {
+    /**
+     * Permet de pulbier un touite sur le feed de touiter
+     * @return string : le touite sur le mur
+     */
 
     public function execute(): string
     {

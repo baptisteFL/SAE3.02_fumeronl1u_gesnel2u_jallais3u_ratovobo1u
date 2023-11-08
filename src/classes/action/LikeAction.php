@@ -10,6 +10,11 @@ require_once "vendor/autoload.php";
 
 class LikeAction extends Action {
 
+    /**
+     * Methode qui permet à un utilisateur connecté de mettre un like sur un touite
+     * Dans la base donné modifie la table touite(note) et aLike
+     * @return string : " "
+     */
     public function execute(): string
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET'){

@@ -6,6 +6,11 @@ require_once "vendor/autoload.php";
 
 class SuivreUtilAction extends Action {
 
+    /**
+     * Méthode qui permet à utilisateur de suivre un autre utilisateur
+     * Dans la base de donné modifie la table suivis
+     * @return string : l'utilisateur ou suis un autre ou demande au premier de se connecter
+     */
     public function execute(): string {
 
         $html = "";
