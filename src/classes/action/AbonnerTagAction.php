@@ -59,7 +59,7 @@ class AbonnerTagAction {
             $sql->bindValue(1, $tag);
             $sql->execute();
             // on vérifie si le tag exsite
-            if ($sql) {
+            if ($sql->rowCount() > 0) {
                 // il faut donc créer une nouvelle table qui stock les tables que l'utilisateur suis
                 $user = unserialize($_SESSION['user']);
                 $email = $user->__get('email');
@@ -73,9 +73,9 @@ class AbonnerTagAction {
                 $insert->bindValue(1, $email);
                 $insert->bindValue(2, $id_tag);
                 $insert->execute();
-                // afficher sur le mur les tag contenant le tag abonner.
-                $html .= $tag;
-                header('Location:?action=mytags');
+                header('Location:?action=myTags');
+            } else {
+                $html .= "<br>le tag n'existe pas<br>";
             }
         }
         return $html;
