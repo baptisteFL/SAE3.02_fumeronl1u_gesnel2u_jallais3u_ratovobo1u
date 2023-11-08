@@ -25,13 +25,13 @@ class SuivreUtilAction extends Action {
             $abonner = $_SESSION['user'];
             $abonnement = "SELECT email from atouite where id_touite = ?";
             $requeteAbonnement = $connexion->prepare($abonnement);
-            $requeteAbonnement->bindParam(1, );
+            $requeteAbonnement->bindParam(1, $_GET['id_touite']);
 
             // on insère dans la base de donnée
             $insert  = "INSERT INTO suivis(emailUtilA, emailUtilB) VALUES (?, ?)";
             $requeteInsert = $connexion->prepare($insert);
             $requeteInsert->bindParam(1, $abonner);
-            $requeteInsert->bindParam(2, );
+            $requeteInsert->bindParam(2, $_SESSION['user'] );
             $requeteInsert->execute();
 
             $html = "<p>Vous suivez {$abonnement}</p>";
