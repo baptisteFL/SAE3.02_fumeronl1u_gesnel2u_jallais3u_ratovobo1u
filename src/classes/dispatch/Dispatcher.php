@@ -8,6 +8,7 @@ use iutnc\touiteur\action\DislikeAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\LikeAction;
 use iutnc\touiteur\action\SignInAction;
+use iutnc\touiteur\action\SuivreUtilAction;
 use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
@@ -62,6 +63,9 @@ class Dispatcher
                 break;
             case 'mytags':
                 $action = new AbonnerTagAction();
+                break;
+            case 'follow-user':
+                $action = new SuivreUtilAction();
                 break;
             default:
                 $action = new FeedAction();
