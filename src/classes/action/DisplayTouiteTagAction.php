@@ -13,7 +13,7 @@ class DisplayTouiteTagAction extends Action
         $bdd = ConnectionFactory::$bdd;
         //afficher les touites de l'utilisateur
         $html = "";
-        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.date 
+        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite
                                         FROM touite, tag, touitepartag, utilisateur, atouite 
                                         where libelleTag= :libelle 
                                         and touite.id_touite=touitepartag.id_touite 
