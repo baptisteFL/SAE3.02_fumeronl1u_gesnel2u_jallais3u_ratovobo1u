@@ -8,7 +8,7 @@ use iutnc\touiteur\db\User;
 
 require_once "vendor/autoload.php";
 
-class SignIn extends Action
+class SignInAction extends Action
 {
 
 
