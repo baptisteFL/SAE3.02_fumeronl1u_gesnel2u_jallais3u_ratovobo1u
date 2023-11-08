@@ -123,6 +123,8 @@ class FeedAction extends Action
             return $interval->i . " minutes";
         } else if ($interval->s > 0) {
             return $interval->s . " secondes";
+        }else{
+            return "0 secondes";
         }
     }
 }

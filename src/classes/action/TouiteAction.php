@@ -29,14 +29,14 @@ class TouiteAction extends Action
                 $texte = $_POST['texte'];
                 ConnectionFactory::makeConnection();
                 $bdd = ConnectionFactory::$bdd;
-                $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, date,note) VALUES (:id, :texte, :date, :note)");
+                $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, dateTouite,note) VALUES (:id, :texte, :date, :note)");
                 $nouvelleId = self::trouverNouveauId();
                 $req->bindValue(":id", $nouvelleId);
                 $req->bindValue(":texte", self::retirerHastag($texte));
                 $req->bindValue(":date", date("Y-m-d H:i:s"));
                 $req->bindValue(":note", 0);
                 $result = $req->execute();
-                $req2 = $bdd->prepare("INSERT INTO atouite (emailUtil,date, id_Touite) VALUES (:emailUtil,:date, :idTouite)");
+                $req2 = $bdd->prepare("INSERT INTO atouite (emailUtil,dateTouite, id_Touite) VALUES (:emailUtil,:date, :idTouite)");
                 $req2->bindValue(":emailUtil", $user->__get('email'));
                 $req2->bindValue(":date", date("Y-m-d H:i:s"));
                 $req2->bindValue(":idTouite", $nouvelleId);
@@ -44,7 +44,7 @@ class TouiteAction extends Action
                 $req3 = $bdd->prepare("INSERT INTO tag (id_tag, libelleTag) VALUES (:idTag, :libelleTag)");
                 $req4 = $bdd->prepare("INSERT INTO touitepartag (id_tag, id_touite) VALUES (:idTag, :idTouite)");
                 $tags = self::extraireHastag($texte);
-                if($tags[0] == ""){
+                if($tags[0] == "" ){
                     $tags = [];
                 }
                 foreach ($tags as $tag) {
@@ -126,6 +126,9 @@ class TouiteAction extends Action
             if(substr($mot, 0, 1) == "#"){
                 $tags[] = substr($mot, 1);
             }
+        }
+        if(count($tags) == 0) {
+            $tags[0] = "";
         }
         return $tags;
     }
