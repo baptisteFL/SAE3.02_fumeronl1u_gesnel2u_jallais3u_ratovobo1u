@@ -53,4 +53,17 @@ class SuivreUtilAction extends Action {
 
         return $html;
     }
+
+    public static function connaitreSuivi(string $email){
+        ConnectionFactory::makeConnection();
+        $bdd = ConnectionFactory::$bdd;
+        $req = $bdd->prepare("
+        select emailUtilSuivi 
+        FROM suivis 
+        WHERE emailUtil = :emailUtil");
+        $req->bindValue(":emailUtil", $email);
+        $result = $req->execute();
+        $suivi = $req->fetchColumn();
+        return $suivi;
+    }
 }
