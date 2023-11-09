@@ -75,7 +75,24 @@ class UserPageAction extends Action
                             </div>
                         </div>';
                             }
-                    $html .= "<br> AFFICHER FOLLOWERS<br>";
+                            $abo = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtil = :email");
+                            $abo->bindValue(":email", $email);
+                            $abo->execute();
+
+                    $html .= "<br> Vous suivez :<br><br>";
+                    while($row4 = $abo->fetch()) {
+                        $html .= $row4['nomUtil'] . " ". $row4['prenomUtil']. "<br>";
+                    }
+
+                    $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtilsuivi = :email");
+                    $suiv->BindValue(":email", $email);
+                    $suiv->execute();
+                    $html .= "<br>Il vous suive :<br>";
+                    while($row5 = $suiv->fetch()) {
+                        $html = $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
+                    }
+
+
                 }catch (\Exception $e){
                     $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
                 }
