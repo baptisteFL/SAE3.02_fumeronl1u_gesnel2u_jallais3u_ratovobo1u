@@ -145,22 +145,53 @@ class FeedAction extends Action
         }
     }
 
-    public static function genererPagination($page)
+    public static function genererPagination($page, $action = 'feed')
     {
-        $html = "";
-        $html .= '<div class="pagination">';
-        if ($page != 1) {
-            $html .= '<a id="lefta" href="?action=feed&page=' . ($page - 1) . '"><</a>';
-        } else {
-            $html .= '<a id="lefta" href="?action=feed&page=' . $page . '"><</a>';
+        $html = '<div class="pagination">';
+        switch ($action) {
+            case 'display-touite-user':
+                if ($page != 1) {
+                    $html .= '<a id="lefta" href="?action=display-touite-user&page=' . ($page - 1) . '"><</a>';
+                } else {
+                    $html .= '<a id="lefta" href="?action=display-touite-user&page=' . $page . '"><</a>';
+                }
+                $html .= '<p>Page '. $page . '</p>';
+                if($page < self::calculerNombrePage()) {
+                    $html .= '<a id="righta" href="?action=display-touite-user&page=' . ($page + 1) . '">></a>';
+                } else {
+                    $html .= '<a id="righta" href="?action=display-touite-user&page=' . $page . '">></a>';
+                }
+                $html .= '</div>';
+                break;
+            case 'display-touite-tag':
+                if ($page != 1) {
+                    $html .= '<a id="lefta" href="?action=display-touite-tag&page=' . ($page - 1) . '"><</a>';
+                } else {
+                    $html .= '<a id="lefta" href="?action=display-touite-tag&page=' . $page . '"><</a>';
+                }
+                $html .= '<p>Page '. $page . '</p>';
+                if($page < self::calculerNombrePage()) {
+                    $html .= '<a id="righta" href="?action=display-touite-tag&page=' . ($page + 1) . '">></a>';
+                } else {
+                    $html .= '<a id="righta" href="?action=display-touite-tag&page=' . $page . '">></a>';
+                }
+                $html .= '</div>';
+                break;
+            default:
+                if ($page != 1) {
+                    $html .= '<a id="lefta" href="?action=feed&page=' . ($page - 1) . '"><</a>';
+                } else {
+                    $html .= '<a id="lefta" href="?action=feed&page=' . $page . '"><</a>';
+                }
+                $html .= '<p>Page '. $page . '</p>';
+                if($page < self::calculerNombrePage()) {
+                    $html .= '<a id="righta" href="?action=feed&page=' . ($page + 1) . '">></a>';
+                } else {
+                    $html .= '<a id="righta" href="?action=feed&page=' . $page . '">></a>';
+                }
+                $html .= '</div>';
         }
-        $html .= '<p>Page '. $page . '</p>';
-        if($page < self::calculerNombrePage()) {
-            $html .= '<a id="righta" href="?action=feed&page=' . ($page + 1) . '">></a>';
-        } else {
-            $html .= '<a id="righta" href="?action=feed&page=' . $page . '">></a>';
-        }
-        $html .= '</div>';
+
         return $html;
     }
 
