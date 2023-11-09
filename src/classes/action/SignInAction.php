@@ -33,11 +33,7 @@ class SignInAction extends Action
             $html .= "<br> Tentative d'authentification...<br>";
             try{
                 Auth::authentificate($_POST['email'], $_POST['password']);
-                $user = new User($_POST['email'], $_POST['password'], "user");
-                $_SESSION['user'] = serialize($user);
-                $html .= "<br> Authentification réussie !<br>";
-                $html .= "<br> Bienvenue {$user->email} !<br>";
-                $html .= "<br> <a href='?action=feed'>Afficher le feed</a><br>";
+                header('Location:?action=feed');
             }catch (AuthException $e){
                 $html .= "<br> Authentification échouée !<br>";
             }

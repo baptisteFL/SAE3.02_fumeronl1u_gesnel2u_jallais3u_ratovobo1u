@@ -73,8 +73,23 @@ class LikeAction extends Action {
                     $addUser->bindValue(":email", $email);
                     $addUser->bindValue(":id", $_GET['id']);
                     $result = $addUser->execute();
+                } elseif ($verifieLike == 1) {
+                    $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
+                    $req->bindValue(":id", $_GET['id']);
+                    $result = $req->execute();
+                    $ancienneVal = $req->fetchColumn();
+
+                    $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
+                    $update->bindValue(":id", $_GET['id']);
+                    $update->bindValue(":note", $ancienneVal - 1);
+                    $result = $update->execute();
+
+                    $delUser = $bdd->prepare("DELETE FROM ALIKE WHERE emailUtil = :email and id_touite = :id");
+                    $delUser->bindValue(":email", $email);
+                    $delUser->bindValue(":id", $_GET['id']);
+                    $result = $delUser->execute();
                 }
-                header('Location:?action=feed');
+                header('Location:?action=feed&page=' . $_GET['page']);
             } else {
                 header('Location:?action=sign-in');
             }
