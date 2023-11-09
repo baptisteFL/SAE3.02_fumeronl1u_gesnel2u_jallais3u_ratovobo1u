@@ -38,22 +38,32 @@ class DisplayAbonnementTagAction extends Action
                         $html .= '<div class="content">' . $row['texte'] . '</div>';
                         $html .= '<div class="note">' . "Score : " . $row['note'] . '</div>';
 
-                        //afficher les tags du touite
-                        $html .= '<div class="tags">';
-                        $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
-                        $req3->bindValue(":idTouite", $row['id_touite']);
-                        $result3 = $req3->execute();
-                        if ($result3) {
-                            while ($row3 = $req3->fetch()) {
-                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
-                            }
+                    //afficher les tags du touite
+                    $html .= '<div class="tags">';
+                    $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                    $req3->bindValue(":idTouite", $row['id_touite']);
+                    $result3 = $req3->execute();
+                    $tag = " ";
+                    if ($result3) {
+                        while ($row3 = $req3->fetch()) {
+                            $html .= '<p class="trending">'."<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>".'#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                            $tag = $row3['libelleTag'];
                         }
-                        $html .= "<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
-                        $html .= '</div>';
-                        $html .= '<div class="actions">
-                                <button id = "like">Like</button>
-                                <button id = "dislike">Dislike</button>
-                                <button>Retouite</button>
+                    }
+                    $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
+                    $html .= '</div>';
+                    $html .= '<div class="actions">';
+                    if (FeedAction::connaitreLikeDislike($row['id_touite'])[0]==0) {
+                        $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&tags=true"><button id = "like">Like</button></a>';
+                    } else {
+                        $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&tags=true"><button id = "grayed">Retirer</button></a>';
+                    }
+                    if (FeedAction::connaitreLikeDislike($row['id_touite'])[1]==0) {
+                        $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&tags=true"><button id = "dislike">Dislike</button></a>';
+                    } else {
+                        $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&tags=true"><button id = "grayed">Retirer</button></a>';
+                    }
+                    $html .= '<button>Retouite</button>
                             </div>
                         </div>';
                     }

@@ -46,10 +46,10 @@ class FeedAction extends Action
                                 $mail = $row2['emailUtil'];
                             }
                         }
-                        $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$mail}'>Suivre</a></button></div>
+                        $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$mail}'><button>Suivre</button></a></div>
                     </span>";
                         if($this->estMonTouite($row['id_touite'])){
-                            $html .= '<div class="actions" id="delete"><a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button>Supprimer</button></a></div>';
+                            $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
                         }
                         $html .= '<div class="timestamp">' . "Il y a " . $this->calculerDepuisQuand($row['id_touite']) . '</div>';
                         $html .= '<div class="content">' . $row['texte'] . '</div>';
@@ -59,7 +59,7 @@ class FeedAction extends Action
                         $result3 = $req3->execute();
                         if ($result3) {
                             while ($row3 = $req3->fetch()) {
-                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                             }
                         }
                         //permet d'afficher plus d'informations sur le touite

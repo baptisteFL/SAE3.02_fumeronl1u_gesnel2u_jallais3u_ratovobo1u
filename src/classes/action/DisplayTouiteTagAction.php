@@ -45,7 +45,7 @@ class DisplayTouiteTagAction extends Action
                 $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
-                $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'>Suivre</a></button></div>
+                $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'><button>Suivre</button></a></div>
                     </span>";
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                 $html .= '<div class="content">' . $row['texte'] . '</div>';
@@ -63,10 +63,18 @@ class DisplayTouiteTagAction extends Action
                 //permet d'afficher plus d'informations sur le touite
                 $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                 $html .= '</div>';
-                $html .= '<div class="actions">
-                                <button id = "like">Like</button>
-                                <button id = "dislike">Dislike</button>
-                                <button>Retouite</button>
+                $html .= '<div class="actions">';
+                if (FeedAction::connaitreLikeDislike($row['id_touite'])[0]==0) {
+                    $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&libelleTag=' . $_GET['libelleTag'] .'"><button id = "like">Like</button></a>';
+                } else {
+                    $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&libelleTag=' . $_GET['libelleTag'] .'"><button id = "grayed">Retirer</button></a>';
+                }
+                if (FeedAction::connaitreLikeDislike($row['id_touite'])[1]==0) {
+                    $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&libelleTag=' . $_GET['libelleTag'] .'"><button id = "dislike">Dislike</button></a>';
+                } else {
+                    $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&libelleTag=' . $_GET['libelleTag'] .'"><button id = "grayed">Retirer</button></a>';
+                }
+                $html .= '<button>Retouite</button>
                             </div>
                         </div>';
             }
