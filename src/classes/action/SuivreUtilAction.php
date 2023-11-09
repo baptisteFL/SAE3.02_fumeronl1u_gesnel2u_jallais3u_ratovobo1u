@@ -37,7 +37,6 @@ class SuivreUtilAction extends Action
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
                 $verif = $req->fetchColumn();
-                var_dump($verif);
                 // si il le suis on le désabonne sinon on l'abonne
             }
             if ($verif == 0) {

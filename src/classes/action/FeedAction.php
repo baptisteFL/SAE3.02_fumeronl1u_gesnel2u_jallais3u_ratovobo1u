@@ -87,7 +87,8 @@ class FeedAction extends Action
                         $html .= '</div>';
                         $html .= '<div class="actions">';
                         if (self::connaitreLikeDislike($row['id_touite'])[0] == 0) {
-                            $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "like">Like</button></a>';
+                            $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "like">Like</b
+utton></a>';
                         } else {
                             $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
                         }
