@@ -3,8 +3,8 @@
 namespace iutnc\touiteur\action;
 
 
-use iutnc\touiteur\db\ConnectionFactory;
 use iutnc\touiteur\action\FeedAction;
+use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
 class DisplayTouiteUserAction extends Action
@@ -13,6 +13,7 @@ class DisplayTouiteUserAction extends Action
         {
             ConnectionFactory::makeConnection();
             $bdd = ConnectionFactory::$bdd;
+
             //gestion de la pagination
             $limite = 10;
             $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
@@ -63,6 +64,7 @@ class DisplayTouiteUserAction extends Action
                 }
             }
             $html .= FeedAction::genererPagination($page, 'display-touite-user');
+
             return $html;
         }
 

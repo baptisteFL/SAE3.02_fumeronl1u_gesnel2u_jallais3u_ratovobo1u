@@ -25,6 +25,7 @@ class UserPageAction extends Action
             if($_SERVER['REQUEST_METHOD'] == 'GET'){
                 try{
                     $result = $req->execute();
+
                     if ($result) {
                         while($row = $req->fetch()){
                             $html .= "<br> Nom : ". $row['nomUtil'] ."<br>";
@@ -32,7 +33,8 @@ class UserPageAction extends Action
                             $html .= "<br> Email : ". $row['emailUtil'] ."<br>";
                         }
                     }
-                    $html .= "<br> VOS TOUITES<br>";
+
+                    $html .= "<br>TOUITES DES UTILISATEURS QUE VOUS SUIVEZ<br>";
 
 
                     $user = unserialize($_SESSION['user']);
