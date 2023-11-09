@@ -35,10 +35,16 @@ class SuivreUtilAction extends Action {
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
                 $verif = $req->fetchColumn();
+                // si il le suis on le désabonne sinon on l'abonne
                 if($verif >= 1){
-                    $html.= "<p>Vous suivez déjà {$emailSuivi}</p>";
-                    //header('Location:?action=user-page');
+                    // on supprime l'abonnement dans la base de données
+                    $req = $bdd->prepare("DELETE FROM suivis WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
+                    $req->bindValue(":emailUtil", $emailUtil);
+                    $req->bindValue(":emailSuivi", $emailSuivi);
+                    $result = $req->execute();
+                    $html = "<p>Vous ne suivez plus {$emailSuivi}</p>";
                 }else{
+                    // on ajoute l'abonnement dans la base de données
                     $req = $bdd->prepare("INSERT INTO suivis VALUES (:emailUtil, :emailSuivi)");
                     $req->bindValue(":emailUtil", $emailUtil);
                     $req->bindValue(":emailSuivi", $emailSuivi);
@@ -46,6 +52,7 @@ class SuivreUtilAction extends Action {
                     $html = "<p>Vous suivez {$emailSuivi}</p>";
                 }
             }
+            // on redirige vers la page de connexion si l'utilisateur n'est pas connecté
         } else {
             header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";
@@ -54,7 +61,7 @@ class SuivreUtilAction extends Action {
         return $html;
     }
 
-    public static function connaitreSuivi(string $email){
+    public static function connaitreSuivi(string $email, string $emailSuivi){
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         $req = $bdd->prepare("
@@ -63,7 +70,12 @@ class SuivreUtilAction extends Action {
         WHERE emailUtil = :emailUtil");
         $req->bindValue(":emailUtil", $email);
         $result = $req->execute();
-        $suivi = $req->fetchColumn();
+        $suivi = false;
+        while($row = $req->fetch()){
+            if($row['emailUtilSuivi'] == $emailSuivi){
+                $suivi = true;
+            }
+        }
         return $suivi;
     }
 }
