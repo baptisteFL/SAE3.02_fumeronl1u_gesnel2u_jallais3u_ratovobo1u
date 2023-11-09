@@ -89,7 +89,16 @@ class LikeAction extends Action {
                     $delUser->bindValue(":id", $_GET['id']);
                     $result = $delUser->execute();
                 }
-                if (isset($_GET['page'])) {
+
+                if (isset($_GET['display'])){
+                    header('Location:?action=display-touite&id_touite=' . $_GET['id']);
+                } elseif (isset($_GET['libelleTag'])) {
+                    header('Location:?action=display-touite-tag&libelleTag=' . $_GET['libelleTag']);
+                } elseif (isset($_GET['userpage'])) {
+                    header('Location:?action=user-page');
+                } elseif (isset($_GET['tags'])) {
+                    header('Location:?action=mytags');
+                } elseif (isset($_GET['page'])) {
                     header('Location:?action=feed&page=' . $_GET['page']);
                 } else {
                     header('Location:?action=feed&page=1');

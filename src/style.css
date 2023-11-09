@@ -16,6 +16,11 @@ header {
     top: 0;
 }
 
+.author > * {
+    color: black;
+    text-decoration: none;
+}
+
 a > p {
     display: inline;
     text-align: right;
@@ -132,6 +137,7 @@ header > a {
 
 .tags > p {
     display: inline;
+    text-decoration: none;
 }
 
 #titleTweet > * {
@@ -142,7 +148,8 @@ header > a {
     margin-left: 0.5vw;
 }
 
-.trending {
+.trending, .trending > * {
+    text-decoration: none;
     color: #ff7e5c;
 }
 
@@ -192,7 +199,7 @@ header > a {
     display: flex;
     flex-direction: row;
     flex-basis: auto;
-    margin: 3vh auto auto;
+    margin: 3vh auto;
 }
 
 .pagination > p {
@@ -223,4 +230,13 @@ header > a {
 #righta {
     border-bottom-right-radius: 20%;
     border-top-right-radius: 20%;
+}
+
+#delete {
+    float: right;
+    background-color: tomato;
+}
+
+#delete:hover {
+    background-color: #9b391b;
 }
