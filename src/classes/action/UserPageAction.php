@@ -98,7 +98,7 @@ class UserPageAction extends Action
                 }
             }
             return $html;
-
+ 
         }
 
 }
