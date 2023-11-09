@@ -40,7 +40,6 @@ class DisplayTouiteAction extends Action
 
                 // affichage de l'image s'il y en a une
                 if ($row['cheminIm'] != null) {
-                    var_dump($row['cheminIm']);
                     $html .= '<div class="image"><img src="' . $row['cheminIm'] . '" alt="image"></div>';
                 }
 
