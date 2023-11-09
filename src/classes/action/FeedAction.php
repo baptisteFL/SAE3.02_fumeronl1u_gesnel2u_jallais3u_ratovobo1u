@@ -28,6 +28,7 @@ class FeedAction extends Action
         $req->bindValue(":limite", $limite, PDO::PARAM_INT);
         $req->bindValue(":decalage", $decalage, PDO::PARAM_INT);
         $html = "";
+        $mail = "";
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             try {
                 $result = $req->execute();
@@ -41,9 +42,10 @@ class FeedAction extends Action
                         if ($result2) {
                             while ($row2 = $req2->fetch()) {
                                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row2['emailUtil']}'>" . $row2['prenomUtil'] . ' ' . $row2['nomUtil'] . "</a>" . '</div>';
+                                $mail = $row2['emailUtil'];
                             }
                         }
-                        $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'>Suivre</a></button></div>
+                        $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$mail}'>Suivre</a></button></div>
                     </span>";
                         if($this->estMonTouite($row['id_touite'])){
                             $html .= '<div class="actions" id="delete"><a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button>Supprimer</button></a></div>';

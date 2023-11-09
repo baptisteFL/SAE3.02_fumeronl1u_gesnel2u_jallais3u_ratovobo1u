@@ -16,7 +16,6 @@ class SuivreUtilAction extends Action {
     public function execute(): string {
 
         $html = "";
-
         if(isset($_SESSION['user'])){
             try{
                 ConnectionFactory::makeConnection();
