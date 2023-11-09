@@ -3,6 +3,7 @@
 namespace iutnc\touiteur\action;
 
 use DateTime;
+use FTP\Connection;
 use iutnc\touiteur\db\ConnectionFactory;
 use Exception;
 use PDO;
@@ -64,10 +65,18 @@ class FeedAction extends Action
                         //permet d'afficher plus d'informations sur le touite
                         $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                         $html .= '</div>';
-                        $html .= '<div class="actions">
-        <a href="?action=like&id=' . $row['id_touite'] . '"><button id = "like">Like</button></a>
-        <a href="?action=dislike&id=' . $row['id_touite'] . '"><button id = "dislike">Dislike</button></a>
-        <button>Retouite</button>
+                        $html .= '<div class="actions">';
+                        if (self::connaitreLikeDislike($row['id_touite'])[0]==0) {
+                            $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "like">Like</button></a>';
+                        } else {
+                            $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
+                        }
+                        if (self::connaitreLikeDislike($row['id_touite'])[1]==0) {
+                            $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "dislike">Dislike</button></a>';
+                        } else {
+                            $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page .'"><button id = "grayed">Retirer</button></a>';
+                        }
+        $html .= '<button>Retouite</button>
     </div>
 </div>';
                     }
@@ -191,5 +200,29 @@ class FeedAction extends Action
         $result = $req->execute();
         $nombreTouite = $req->fetchColumn();
         return ceil($nombreTouite / 10);
+    }
+
+    public static function connaitreLikeDislike($id){
+        if (isset($_SESSION['user'])) {
+            $user = unserialize($_SESSION['user']);
+            $email = $user->__get('email');
+            ConnectionFactory::makeConnection();
+            $bdd = ConnectionFactory::$bdd;
+            $req = $bdd->prepare("SELECT count(*) FROM ALIKE WHERE id_touite = :id AND emailUtil = :email");
+            $req->bindValue(":id", $id);
+            $req->bindValue(":email", $email);
+            $result = $req->execute();
+            $verifLike = $req->fetchColumn();
+
+            $req = $bdd->prepare("SELECT count(*) FROM ADISLIKE WHERE id_touite = :id AND emailUtil = :email");
+            $req->bindValue(":id", $id);
+            $req->bindValue(":email", $email);
+            $result = $req->execute();
+            $verifDislike = $req->fetchColumn();
+
+            return [$verifLike, $verifDislike];
+        } else {
+            return [0, 0];
+        }
     }
 }
