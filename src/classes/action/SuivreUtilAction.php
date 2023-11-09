@@ -27,12 +27,26 @@ class SuivreUtilAction extends Action {
             // on récupère le mail de celui qui s'abonne et de la l'abonnement
             $emailUtil = unserialize($_SESSION['user'])->__get('email');
             $emailSuivi = $_GET['emailSuivi'];
-            $req = $bdd->prepare("INSERT INTO suivis VALUES (:emailUtil, :emailSuivi)");
-            $req->bindValue(":emailUtil", $emailUtil);
-            $req->bindValue(":emailSuivi", $emailSuivi);
-            $result = $req->execute();
-
-            $html = "<p>Vous suivez {$emailSuivi}</p>";
+            if($emailUtil == $emailSuivi){
+                header('Location:?action=user-page');
+            }else{
+                // on vérifie que l'utilisateur ne suis pas déjà l'autre
+                $req = $bdd->prepare("SELECT count(*) FROM suivis WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
+                $req->bindValue(":emailUtil", $emailUtil);
+                $req->bindValue(":emailSuivi", $emailSuivi);
+                $result = $req->execute();
+                $verif = $req->fetchColumn();
+                if($verif >= 1){
+                    $html.= "<p>Vous suivez déjà {$emailSuivi}</p>";
+                    //header('Location:?action=user-page');
+                }else{
+                    $req = $bdd->prepare("INSERT INTO suivis VALUES (:emailUtil, :emailSuivi)");
+                    $req->bindValue(":emailUtil", $emailUtil);
+                    $req->bindValue(":emailSuivi", $emailSuivi);
+                    $result = $req->execute();
+                    $html = "<p>Vous suivez {$emailSuivi}</p>";
+                }
+            }
         } else {
             header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";
