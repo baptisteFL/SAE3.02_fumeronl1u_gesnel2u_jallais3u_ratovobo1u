@@ -23,7 +23,7 @@ class DisplayAbonnementTagAction extends Action
             $user = unserialize($_SESSION['user']);
             $email = $user->__get('email');
             // On récupère l'ensemble des id_tag sur lesquels un utilisateur est abonné.
-            $stock = $bdd->prepare("SELECT DISTINCT T.*, U.* FROM TOUITE AS T JOIN TOUITEPARTAG AS TP ON T.id_touite = TP.id_touite JOIN TAGSUIVI AS TS ON TP.id_tag = TS.id_tag JOIN UTILISATEUR AS U ON TS.emailUtil = U.emailUtil WHERE TS.emailUtil =  :email ORDER BY dateTouite DESC");
+            $stock = $bdd->prepare("SELECT DISTINCT T.*, U.* FROM TOUITE AS T JOIN TOUITEPARTAG AS TP ON T.id_touite = TP.id_touite JOIN TAGSUIVI AS TS ON TP.id_tag = TS.id_tag JOIN ATOUITE AS AT ON AT.id_touite=T.id_touite JOIN UTILISATEUR AS U ON AT.emailUtil = U.emailUtil WHERE TS.emailUtil =  :email ORDER BY dateTouite DESC");
             // $requeteTest = $bdd->prepare("SELECT id_touite from tagsuivi natural join tagpartouite natural join ")
             $stock->bindValue(":email", $email);
             $stock->execute();
