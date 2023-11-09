@@ -19,8 +19,7 @@ class FeedAction extends Action
 
 
         $limite = 10;
-        $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-        $page = $_GET['page'];
+        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 
         $decalage = ($page - 1) * $limite;
 
@@ -34,19 +33,17 @@ class FeedAction extends Action
                 if ($result) {
                     while ($row = $req->fetch()) {
                         $html .= '<div class="tweet">
-                    <span id="titleTweet"> ';
+                                    <span id="titleTweet"> ';
                         $req2 = $bdd->prepare("SELECT * FROM utilisateur natural join atouite where id_touite = :idTouite");
                         $req2->bindValue(":idTouite", $row['id_touite']);
                         $result2 = $req2->execute();
-                        $mail = "";
                         if ($result2) {
                             while ($row2 = $req2->fetch()) {
                                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row2['emailUtil']}'>" . $row2['prenomUtil'] . ' ' . $row2['nomUtil'] . "</a>" . '</div>';
-                                $mail = $row2['emailUtil'];
                             }
                         }
-                        $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$mail}'>Suivre</a></button></div>
-                    </span>";
+                        $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
+                    </span>';
                         if($this->estMonTouite($row['id_touite'])){
                             $html .= '<div class="actions" id="delete"><a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button>Supprimer</button></a></div>';
                         }
@@ -145,30 +142,22 @@ class FeedAction extends Action
         }
     }
 
-    public static function genererPagination($page, string $action = "feed"): string
+    public static function genererPagination($page)
     {
         $html = "";
-        switch ($action){
-            case "display-touite-user":
-                $html .= '<div class="pagination">';
-                $html .= '<a href="?action=display-touite-user&page=' . ($page - 1) . '">&laquo;</a>';
-                $html .= '<a href="?action=display-touite-user&page=' . ($page + 1) . '">&raquo;</a>';
-                $html .= '</div>';
-                break;
-            case "display-touite-tag":
-                $html .= '<div class="pagination">';
-                $html .= '<a href="?action=display-touite-tag&page=' . ($page - 1) . '">&laquo;</a>';
-                $html .= '<a href="?action=display-touite-tag&page=' . ($page + 1) . '">&raquo;</a>';
-                $html .= '</div>';
-                break;
-            default :
-                $html = "";
-                $html .= '<div class="pagination">';
-                $html .= '<a href="?action=feed&page=' . ($page - 1) . '">&laquo;</a>';
-                $html .= '<a href="?action=feed&page=' . ($page + 1) . '">&raquo;</a>';
-                $html .= '</div>';
-                break;
+        $html .= '<div class="pagination">';
+        if ($page != 1) {
+            $html .= '<a id="lefta" href="?action=feed&page=' . ($page - 1) . '"><</a>';
+        } else {
+            $html .= '<a id="lefta" href="?action=feed&page=' . $page . '"><</a>';
         }
+        $html .= '<p>Page '. $page . '</p>';
+        if($page < self::calculerNombrePage()) {
+            $html .= '<a id="righta" href="?action=feed&page=' . ($page + 1) . '">></a>';
+        } else {
+            $html .= '<a id="righta" href="?action=feed&page=' . $page . '">></a>';
+        }
+        $html .= '</div>';
         return $html;
     }
 
@@ -189,5 +178,15 @@ class FeedAction extends Action
             }
         }
         return false;
+    }
+
+    public static function calculerNombrePage()
+    {
+        ConnectionFactory::makeConnection();
+        $bdd = ConnectionFactory::$bdd;
+        $req = $bdd->prepare("SELECT count(*) FROM touite");
+        $result = $req->execute();
+        $nombreTouite = $req->fetchColumn();
+        return ceil($nombreTouite / 10);
     }
 }

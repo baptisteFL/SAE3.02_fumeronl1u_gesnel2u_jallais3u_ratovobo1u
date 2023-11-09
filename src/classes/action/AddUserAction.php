@@ -32,7 +32,7 @@ class AddUserAction extends Action
             $html .= "<br> Tentative d'enregistrement...<br>";
             try {
                 Auth::register($_POST['email'], $_POST['password'], $_POST['nom'], $_POST['prenom']);
-                $html .= "<br> Utilisateur enregistré !<br>";
+                header('Location:?action=feed');
             } catch (AuthException $e) {
                 $html .= "<br> Enregistrement échoué !<br>";
             }
