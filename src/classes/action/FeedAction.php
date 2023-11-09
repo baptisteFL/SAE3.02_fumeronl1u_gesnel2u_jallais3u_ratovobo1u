@@ -3,9 +3,8 @@
 namespace iutnc\touiteur\action;
 
 use DateTime;
-use FTP\Connection;
-use iutnc\touiteur\db\ConnectionFactory;
 use Exception;
+use iutnc\touiteur\db\ConnectionFactory;
 use PDO;
 
 require_once "vendor/autoload.php";
@@ -17,7 +16,12 @@ class FeedAction extends Action
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
+        $emailUtil = "";
 
+        if (isset($_SESSION['user'])) {
+            $user = unserialize($_SESSION['user']);
+            $emailUtil = $user->__get('email');
+        }
 
         $limite = 10;
         $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
@@ -46,9 +50,21 @@ class FeedAction extends Action
                                 $mail = $row2['emailUtil'];
                             }
                         }
-                        $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$mail}'><button>Suivre</button></a></div>
-                    </span>";
-                        if($this->estMonTouite($row['id_touite'])){
+
+                        /* BOUTON SUIVRE */
+                        //si on ne suit pas l'utilisateur on peut follow
+                        if (!$this->estMonTouite($row['id_touite'])) {
+                            if (!SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
+                                $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$mail}'><button>Suivre</button></a></div>
+                            </span>";
+                            }
+                            //si on suit l'utilisateur on peut unfollow
+                            if (SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
+                                $html .= "<div class='actions' id='follow'><a href='?action=unfollow-user&emailSuivi={$mail}'><button>Ne plus suivre</button></a></div></span>";
+                            }
+                        }
+
+                        if ($this->estMonTouite($row['id_touite'])) {
                             $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
                         }
                         $html .= '<div class="timestamp">' . "Il y a " . $this->calculerDepuisQuand($row['id_touite']) . '</div>';
@@ -63,20 +79,20 @@ class FeedAction extends Action
                             }
                         }
                         //permet d'afficher plus d'informations sur le touite
-                        $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
+                        $html .= "<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                         $html .= '</div>';
                         $html .= '<div class="actions">';
-                        if (self::connaitreLikeDislike($row['id_touite'])[0]==0) {
+                        if (self::connaitreLikeDislike($row['id_touite'])[0] == 0) {
                             $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "like">Like</button></a>';
                         } else {
                             $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
                         }
-                        if (self::connaitreLikeDislike($row['id_touite'])[1]==0) {
+                        if (self::connaitreLikeDislike($row['id_touite'])[1] == 0) {
                             $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "dislike">Dislike</button></a>';
                         } else {
-                            $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page .'"><button id = "grayed">Retirer</button></a>';
+                            $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
                         }
-        $html .= '<button>Retouite</button>
+                        $html .= '<button>Retouite</button>
     </div>
 </div>';
                     }
@@ -99,7 +115,8 @@ class FeedAction extends Action
      * @return int
      */
 
-    public static function calculerNombreTouiteParTag(int $idTag): int
+    public
+    static function calculerNombreTouiteParTag(int $idTag): int
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -122,7 +139,8 @@ class FeedAction extends Action
      * @throws Exception
      */
 
-    public static function calculerDepuisQuand($id_touite)
+    public
+    static function calculerDepuisQuand($id_touite)
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -149,12 +167,13 @@ class FeedAction extends Action
             return $interval->i . " minutes";
         } else if ($interval->s > 0) {
             return $interval->s . " secondes";
-        }else{
+        } else {
             return "0 secondes";
         }
     }
 
-    public static function genererPagination($page, $action = 'feed')
+    public
+    static function genererPagination($page, $action = 'feed')
     {
         $html = '<div class="pagination">';
         switch ($action) {
@@ -164,8 +183,8 @@ class FeedAction extends Action
                 } else {
                     $html .= '<a id="lefta" href="?action=display-touite-user&page=' . $page . '"><</a>';
                 }
-                $html .= '<p>Page '. $page . '</p>';
-                if($page < self::calculerNombrePage()) {
+                $html .= '<p>Page ' . $page . '</p>';
+                if ($page < self::calculerNombrePage()) {
                     $html .= '<a id="righta" href="?action=display-touite-user&page=' . ($page + 1) . '">></a>';
                 } else {
                     $html .= '<a id="righta" href="?action=display-touite-user&page=' . $page . '">></a>';
@@ -178,8 +197,8 @@ class FeedAction extends Action
                 } else {
                     $html .= '<a id="lefta" href="?action=display-touite-tag&page=' . $page . '"><</a>';
                 }
-                $html .= '<p>Page '. $page . '</p>';
-                if($page < self::calculerNombrePage()) {
+                $html .= '<p>Page ' . $page . '</p>';
+                if ($page < self::calculerNombrePage()) {
                     $html .= '<a id="righta" href="?action=display-touite-tag&page=' . ($page + 1) . '">></a>';
                 } else {
                     $html .= '<a id="righta" href="?action=display-touite-tag&page=' . $page . '">></a>';
@@ -192,8 +211,8 @@ class FeedAction extends Action
                 } else {
                     $html .= '<a id="lefta" href="?action=feed&page=' . $page . '"><</a>';
                 }
-                $html .= '<p>Page '. $page . '</p>';
-                if($page < self::calculerNombrePage()) {
+                $html .= '<p>Page ' . $page . '</p>';
+                if ($page < self::calculerNombrePage()) {
                     $html .= '<a id="righta" href="?action=feed&page=' . ($page + 1) . '">></a>';
                 } else {
                     $html .= '<a id="righta" href="?action=feed&page=' . $page . '">></a>';
@@ -204,17 +223,19 @@ class FeedAction extends Action
         return $html;
     }
 
-    public static function estMonTouite($id){
+    public
+    static function estMonTouite($id)
+    {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         $req = $bdd->prepare("SELECT * FROM atouite WHERE id_touite = :idTouite");
         $req->bindValue(":idTouite", $id);
         $result = $req->execute();
-        if($result){
-            while($row = $req->fetch()){
-                if(isset($_SESSION['user'])){
+        if ($result) {
+            while ($row = $req->fetch()) {
+                if (isset($_SESSION['user'])) {
                     $user = unserialize($_SESSION['user']);
-                    if($user->__get('email') == $row['emailUtil']){
+                    if ($user->__get('email') == $row['emailUtil']) {
                         return true;
                     }
                 }
@@ -223,7 +244,8 @@ class FeedAction extends Action
         return false;
     }
 
-    public static function calculerNombrePage()
+    public
+    static function calculerNombrePage()
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -233,7 +255,9 @@ class FeedAction extends Action
         return ceil($nombreTouite / 10);
     }
 
-    public static function connaitreLikeDislike($id){
+    public
+    static function connaitreLikeDislike($id)
+    {
         if (isset($_SESSION['user'])) {
             $user = unserialize($_SESSION['user']);
             $email = $user->__get('email');

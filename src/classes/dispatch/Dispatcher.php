@@ -13,6 +13,7 @@ use iutnc\touiteur\action\SignInAction;
 use iutnc\touiteur\action\SupprimerTouiteAction;
 use iutnc\touiteur\action\SuivreUtilAction;
 use iutnc\touiteur\action\TouiteAction;
+use iutnc\touiteur\action\UnfollowUserAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\DisplayTouiteTagAction;
@@ -72,6 +73,9 @@ class Dispatcher
                 break;
             case 'follow-user':
                 $action = new SuivreUtilAction();
+                break;
+            case 'unfollow-user':
+                $action = new UnfollowUserAction();
                 break;
             case 'supprimer-touite':
                 $action = new SupprimerTouiteAction();
