@@ -71,7 +71,7 @@ class TouiteAction extends Action
                     $req->bindValue(":texte", $texte);
                     $req->bindValue(":date", date("Y-m-d H:i:s"));
                     $req->bindValue(":note", 0);
-                    $req->bindValue(":chemin", $destinationPath . $fileTmpName);
+                    $req->bindValue(":chemin", $destinationPath);
                     $result = $req->execute();
 
                 } else {
