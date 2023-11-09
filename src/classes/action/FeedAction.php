@@ -19,7 +19,8 @@ class FeedAction extends Action
 
 
         $limite = 10;
-        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $page = $_GET['page'];
 
         $decalage = ($page - 1) * $limite;
 
