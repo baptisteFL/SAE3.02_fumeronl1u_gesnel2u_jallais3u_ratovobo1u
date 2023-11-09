@@ -19,7 +19,7 @@ class DisplayTouiteAction extends Action
             $bdd = ConnectionFactory::$bdd;
             //afficher un touite en detail
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.emailUtil, utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note
+            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.emailUtil, utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note, touite.cheminIm
                                     from touite, atouite, utilisateur where touite.id_touite = :idTouite
                                                                         and utilisateur.emailUtil = atouite.emailUtil 
                                                                         and atouite.id_touite = touite.id_touite 
@@ -36,6 +36,12 @@ class DisplayTouiteAction extends Action
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                     $html .= '<div class="content">' . $row['texte'] . '</div>';
                     $html .= '<div class="note">' . "Score : " . $row['note'] . '</div>';
+
+                    // affichage de l'image s'il y en a une
+                    if($row['cheminIm']!=null){
+                        var_dump($row['cheminIm']);
+                        $html .= '<div class="image"><img src="'.$row['cheminIm'].'" alt="image"></div>';
+                    }
 
                     //afficher les tags du touite
                     $html .= '<div class="tags">';
