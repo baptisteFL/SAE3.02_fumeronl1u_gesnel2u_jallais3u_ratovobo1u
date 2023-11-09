@@ -5,34 +5,46 @@ namespace iutnc\touiteur\action;
 
 use iutnc\touiteur\db\ConnectionFactory;
 
-class DisplayTouiteAction extends Action
+class DisplayAbonnementTagAction extends Action
 {
 
     /**
-     * Méthode qui permet d'afficher les touites sur le feed
+     * Méthode qui qui d'afficher  les touites qui possède un tag avec lequel l'utilisateur est abonné
      * @return string
      * @throws \Exception
      */
-        public function execute() : string
-        {
-            ConnectionFactory::makeConnection();
-            $bdd = ConnectionFactory::$bdd;
-            //afficher un touite en detail
-            $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.emailUtil, utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note
-                                    from touite, atouite, utilisateur where touite.id_touite = :idTouite
-                                                                        and utilisateur.emailUtil = atouite.emailUtil 
-                                                                        and atouite.id_touite = touite.id_touite 
-                                                                        order by touite.datetouite desc");
-            $requete->bindValue(":idTouite", $_GET['id_touite']);
+    public function execute() : string
+    {
+        ConnectionFactory::makeConnection();
+        $bdd = ConnectionFactory::$bdd;
+        //afficher un touite en detail
+        $html = "";
+        $user = unserialize($_SESSION['user']);
+        $email = $user->__get('email');
+        // On récupère l'ensemble des id_tag sur lesquels un utilisateur est abonné.
+        $stock = $bdd->prepare("SELECT id_tag FROM TAGSUIVI WHERE emailUtil = :email");
+        $stock->bindValue(":email", $email);
+        $stock->execute();
+        // On stock dans un tableau les id_tags
+        $idtags = [];
+        $i = 0;
+        while($row = $stock->fetch()){
+            $idtags[$i] = $row['id_tag'];
+            $i++;
+        }
+        // Boucle qui pour chaque id_tag retourne les touites en rapport
+        foreach ($idtags as $value) {
+            // requête qui permet de selectionner les touites qui possède un tag avec lequel l'utilisateur est abonné.
+            $requete = $bdd->prepare("SELECT DISTINCT * , Utilisateur.nomUtil FROM touite natural join touitepartag natural join Utilisateur where id_tag = :id");
+            $requete->bindValue(":id", $value);
             $result = $requete->execute();
             if($result){
                 while($row = $requete->fetch()){
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
-                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
-                    $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'>Suivre</a></button></div>
-                    </span>";
+                    $html .= '<div class="author">'. "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
+                    $html .= '<div class="actions" id="follow"><button>Suivre</button></div>
+                    </span>';
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                     $html .= '<div class="content">' . $row['texte'] . '</div>';
                     $html .= '<div class="note">' . "Score : " . $row['note'] . '</div>';
@@ -57,7 +69,8 @@ class DisplayTouiteAction extends Action
                         </div>';
                 }
             }
-            return $html;
         }
+        return $html;
+    }
 
 }

@@ -5,6 +5,8 @@ namespace iutnc\touiteur\dispatch;
 use iutnc\touiteur\action\AbonnerTagAction;
 use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\DislikeAction;
+use iutnc\touiteur\action\DisplayAbonnementTagAction;
+use iutnc\touiteur\action\DisplayInfluenceurAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\LikeAction;
 use iutnc\touiteur\action\SignInAction;
@@ -63,6 +65,9 @@ class Dispatcher
                 $action = new DislikeAction();
                 break;
             case 'mytags':
+                $action = new DisplayAbonnementTagAction();
+                break;
+            case 'abonnerTag' :
                 $action = new AbonnerTagAction();
                 break;
             case 'follow-user':
@@ -103,6 +108,7 @@ class Dispatcher
     }
     echo '
     <a href="?action=mytags"><p>My tags</p></a>
+    <a href="?action=abonnerTag"><p>Abonnement Tag</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
 </header>';
