@@ -20,7 +20,7 @@ a > p {
     display: inline;
     text-align: right;
     padding: 1vw;
-    margin-top: 10px;
+    margin-top: 1vw;
     font-size: larger;
 }
 
@@ -37,8 +37,8 @@ header h1 {
 .tweet {
     background-color: #fff;
     border: 1px solid #ccc;
-    margin: 10px;
-    padding: 10px;
+    margin: 1vw;
+    padding: 1vw;
 }
 
 .tweet .author {
@@ -50,18 +50,18 @@ header h1 {
 }
 
 .tweet .content {
-    margin-top: 5px;
+    margin-top: 0.5vw;
 }
 
 .tweet .actions {
-    margin-top: 10px;
+    margin-top: 1vw;
 }
 
 button {
     background-color: #00aced;
     color: #fff;
     border: none;
-    padding: 5px 10px;
+    padding: 0.5vw 1vw;
     cursor: pointer;
     margin-right: 0.3vw;
 }
@@ -82,8 +82,8 @@ header > a {
     flex-direction: column;
     justify-items: center;
     align-content: center;
-    max-width: 30%;
-    margin: 10vh;
+    min-width: 30%;
+    margin: 10vh auto;
 }
 
 #signin > h1 {
@@ -172,7 +172,7 @@ header > a {
     background-color: #00aced;
     color: #fff;
     border: none;
-    padding: 5px 10px;
+    padding: 0.5vw 1vw;
     cursor: pointer;
 }
 
@@ -192,8 +192,7 @@ header > a {
     display: flex;
     flex-direction: row;
     flex-basis: auto;
-    margin: auto;
-    margin-top: 3vh;
+    margin: 3vh auto auto;
 }
 
 .pagination > p {

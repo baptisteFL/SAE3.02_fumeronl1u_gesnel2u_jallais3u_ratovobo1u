@@ -88,9 +88,15 @@ class DislikeAction extends Action {
                     $delUser->bindValue(":id", $_GET['id']);
                     $result = $delUser->execute();
                 }
+                if (isset($_GET['page'])) {
+                    header('Location:?action=feed&page=' . $_GET['page']);
+                } else {
+                    header('Location:?action=feed&page=1');
+                }
+            } else {
+                header('Location:?action=sign-in');
             }
         }
-        header('Location:?action=feed&page=' . $_GET['page']);
         return " ";
     }
 }
