@@ -21,7 +21,7 @@ class AbonnerTagAction {
                                             <input type="submit" id="submit" value="Suivre">
                                          </form>
                                 </div>';
-                $html .= "<br>Vos tags :<br>";
+                $html .= "<br>Vos tags : <br>" ;
                 // On se connecte à la base
                 ConnectionFactory::makeConnection();
                 $bdd = ConnectionFactory::$bdd;
@@ -44,7 +44,7 @@ class AbonnerTagAction {
                     $tagUtil->bindValue(1, $value);
                     $tagUtil->execute();
                     $libelleTag = $tagUtil->fetchColumn();
-                    $html .= "<br>$libelleTag<br>";
+                    $html .= "$libelleTag<br>";
                 }
             }else {
                 header('Location:?action=sign-in');
