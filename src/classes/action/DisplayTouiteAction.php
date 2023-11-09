@@ -32,7 +32,10 @@ class DisplayTouiteAction extends Action
                     <span id="titleTweet"> ';
                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
                 $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'><button>Suivre</button></a></div>
-                    </span>";
+                        </span>";
+                if(FeedAction::estMonTouite($row['id_touite'])){
+                            $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&display=true"><button id="delete">Supprimer</button></a>';
+                }
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                 $html .= '<div class="content">' . $row['texte'] . '</div>';
                 $html .= '<div class="note">' . "Score : " . $row['note'] . '</div>';
@@ -49,7 +52,11 @@ class DisplayTouiteAction extends Action
                 $result3 = $req3->execute();
                 if ($result3) {
                     while ($row3 = $req3->fetch()) {
-                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                        if ($row3['id_tag'] == FeedAction::obtenirTendance()) {
+                            $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                        } else {
+                            $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                        }
                     }
                 }
                 $html .= "<br><a href='?action=feed'>Voir moins</a>";

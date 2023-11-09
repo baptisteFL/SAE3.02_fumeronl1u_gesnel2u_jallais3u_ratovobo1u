@@ -30,7 +30,13 @@ class SupprimerTouiteAction extends Action{
                 $result3 = $req3->execute();
                 $result4 = $req4->execute();
                 $result5 = $req5->execute();
-                header("Location:?action=feed&page=" . $_GET['page']);
+                if (isset($_GET['page'])) {
+                    header("Location:?action=feed&page=" . $_GET['page']);
+                } elseif (isset($_GET['display'])){
+                    header('Location:?action=feed&page=1');
+                } elseif (isset($_GET['displayTag'])){
+                    header('Location:?action=display-touite-tag&libelleTag=' . $_GET['displayTag']);
+                }
             }
         }
         return "";

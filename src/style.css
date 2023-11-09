@@ -131,13 +131,13 @@ header > a {
 .tags {
     gap: 1vw;
     font-size: small;
-    color: #888;
     margin: 0.7vh 0;
 }
 
-.tags > p {
+.tags > * {
     display: inline;
     text-decoration: none;
+    color: #888;
 }
 
 #titleTweet > * {
@@ -239,4 +239,8 @@ header > a {
 
 #delete:hover {
     background-color: #9b391b;
+}
+
+#follow {
+    margin-left: 1vw;
 }

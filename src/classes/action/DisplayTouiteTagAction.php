@@ -40,6 +40,7 @@ class DisplayTouiteTagAction extends Action
         //afficher les touites associés au tag
         $result = $requete->execute();
         if ($result) {
+            $i=0;
             while ($row = $requete->fetch()) {
                 //
                 $html .= '<div class="tweet">
@@ -47,6 +48,9 @@ class DisplayTouiteTagAction extends Action
                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
                 $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'><button>Suivre</button></a></div>
                     </span>";
+                if(FeedAction::estMonTouite($row['id_touite'])){
+                    $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&displayTag=' . $_GET['libelleTag'] . '"><button id="delete">Supprimer</button></a>';
+                }
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                 $html .= '<div class="content">' . $row['texte'] . '</div>';
 
@@ -57,7 +61,11 @@ class DisplayTouiteTagAction extends Action
                 $result3 = $req3->execute();
                 if ($result3) {
                     while ($row3 = $req3->fetch()) {
-                        $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                        if ($row3['id_tag'] == FeedAction::obtenirTendance()) {
+                            $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                        } else {
+                            $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                        }
                     }
                 }
                 //permet d'afficher plus d'informations sur le touite
@@ -77,6 +85,10 @@ class DisplayTouiteTagAction extends Action
                 $html .= '<button>Retouite</button>
                             </div>
                         </div>';
+                $i++;
+            }
+            if ($i == 0){
+                header('Location:?action=feed&page=1');
             }
         }
         $html .= FeedAction::genererPagination($page, 'display-touite-tag');

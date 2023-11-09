@@ -46,8 +46,11 @@ class DisplayAbonnementTagAction extends Action
                     $tag = " ";
                     if ($result3) {
                         while ($row3 = $req3->fetch()) {
-                            $html .= '<p class="trending">'."<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>".'#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
-                            $tag = $row3['libelleTag'];
+                            if ($row3['id_tag'] == FeedAction::obtenirTendance()) {
+                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                            } else {
+                                $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                            }
                         }
                     }
                     $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";

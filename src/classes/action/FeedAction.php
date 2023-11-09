@@ -55,14 +55,14 @@ class FeedAction extends Action
                         //si on ne suit pas l'utilisateur on peut follow
                         if (!$this->estMonTouite($row['id_touite'])) {
                             if (!SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
-                                $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$mail}'><button>Suivre</button></a></div>
-                            </span>";
+                                $html .= "<a href='?action=follow-user&emailSuivi={$mail}'><button id='follow'>Suivre</button></a>";
                             }
                             //si on suit l'utilisateur on peut unfollow
                             if (SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
-                                $html .= "<div class='actions' id='follow'><a href='?action=unfollow-user&emailSuivi={$mail}'><button>Ne plus suivre</button></a></div></span>";
+                                $html .= "<a href='?action=unfollow-user&emailSuivi={$mail}'><button id='follow'>Ne plus suivre</button></a>";
                             }
                         }
+                        $html .= "</span>";
 
                         if ($this->estMonTouite($row['id_touite'])) {
                             $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
@@ -75,11 +75,15 @@ class FeedAction extends Action
                         $result3 = $req3->execute();
                         if ($result3) {
                             while ($row3 = $req3->fetch()) {
-                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                if ($row3['id_tag'] == self::obtenirTendance()) {
+                                    $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                } else {
+                                    $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                }
                             }
                         }
                         //permet d'afficher plus d'informations sur le touite
-                        $html .= "<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
+                        $html .= "<a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                         $html .= '</div>';
                         $html .= '<div class="actions">';
                         if (self::connaitreLikeDislike($row['id_touite'])[0] == 0) {
@@ -115,8 +119,7 @@ class FeedAction extends Action
      * @return int
      */
 
-    public
-    static function calculerNombreTouiteParTag(int $idTag): int
+    public static function calculerNombreTouiteParTag(int $idTag): int
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -139,8 +142,7 @@ class FeedAction extends Action
      * @throws Exception
      */
 
-    public
-    static function calculerDepuisQuand($id_touite)
+    public static function calculerDepuisQuand($id_touite)
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -172,8 +174,7 @@ class FeedAction extends Action
         }
     }
 
-    public
-    static function genererPagination($page, $action = 'feed')
+    public static function genererPagination($page, $action = 'feed')
     {
         $html = '<div class="pagination">';
         switch ($action) {
@@ -219,13 +220,10 @@ class FeedAction extends Action
                 }
                 $html .= '</div>';
         }
-
         return $html;
     }
 
-    public
-    static function estMonTouite($id)
-    {
+    public static function estMonTouite($id){
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         $req = $bdd->prepare("SELECT * FROM atouite WHERE id_touite = :idTouite");
@@ -244,8 +242,7 @@ class FeedAction extends Action
         return false;
     }
 
-    public
-    static function calculerNombrePage()
+    public static function calculerNombrePage()
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -255,9 +252,7 @@ class FeedAction extends Action
         return ceil($nombreTouite / 10);
     }
 
-    public
-    static function connaitreLikeDislike($id)
-    {
+    public static function connaitreLikeDislike($id){
         if (isset($_SESSION['user'])) {
             $user = unserialize($_SESSION['user']);
             $email = $user->__get('email');
@@ -279,5 +274,14 @@ class FeedAction extends Action
         } else {
             return [0, 0];
         }
+    }
+
+    public static function obtenirTendance(){
+        ConnectionFactory::makeConnection();
+        $bdd = ConnectionFactory::$bdd;
+        $req = $bdd->prepare("SELECT id_tag FROM touitepartag GROUP BY id_tag HAVING count(id_touite) >= ALL(SELECT count(id_touite) FROM touitepartag GROUP BY id_tag)");
+        $result = $req->execute();
+        $id = $req->fetchColumn();
+        return $id;
     }
 }
