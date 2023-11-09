@@ -52,7 +52,7 @@ class DisplayTouiteAction extends Action
                         $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . '</a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                     }
                 }
-                $html .= "<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
+                $html .= "<br><a href='?action=feed'>Voir moins</a>";
                 $html .= '</div>';
                 $html .= '<div class="actions">';
                     if (FeedAction::connaitreLikeDislike($row['id_touite'])[0] == 0) {
