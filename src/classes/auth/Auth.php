@@ -25,6 +25,10 @@ class Auth
         $bdd = ConnectionFactory::$bdd;
         // Récupération de l'utilisateur
         $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
+        // filter var ok sinon exception
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            throw new AuthException("L'email n'est pas valide");
+        }
         $req->bindValue(":email", $email);
         $result = $req->execute();
         if ($result) {
@@ -76,9 +80,18 @@ class Auth
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         // Insertion dans la base de données
         $req = $bdd->prepare("INSERT INTO utilisateur(emailUtil, nomUtil, prenomUtil, password, role) VALUES (:email, :nom, :prenom, :password, 'user')");
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            throw new AuthException("L'email n'est pas valide");
+        }
         $req->bindValue(":email", $email);
         $req->bindValue(":password", $passwordHash);
+        if(!preg_match("/^[a-zA-Z ]*$/",$nom)){
+            throw new AuthException("Le nom n'est pas valide");
+        }
         $req->bindValue(":nom", $nom);
+        if(!preg_match("/^[a-zA-Z ]*$/",$prenom)){
+            throw new AuthException("Le prénom n'est pas valide");
+        }
         $req->bindValue(":prenom", $prenom);
         $result = $req->execute();
         // Création de l'objet User et stockage dans la session
