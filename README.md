@@ -21,11 +21,11 @@ Afficher la liste touites en version courte en ordre chronologique inverse. (Ker
 
 Les utilisateurs anonymes peuvent créer un compte à partir de l’onglet inscription.. (Kerrian)
 
-Les utilisateurs possédant un compte Touiteur peuvent se connecter à leur compte en passant par l’onglet connexion. ()
+Les utilisateurs possédant un compte Touiteur peuvent se connecter à leur compte en passant par l’onglet connexion. (Kerrian)
     
 Lorsque l’on clique sur le nom d’un auteur, on affiche tous les touites de cette personne. (Nicka)
 
-L’utilisateur peut afficher les touites associés à un tag.
+L’utilisateur peut afficher les touites associés à un tag (Nicka -> clique sur un tag / Bastien -> MyTag).
 
 Un utilisateur peut s'abonner à un tag, puis s'aff.(Bastien)
    
