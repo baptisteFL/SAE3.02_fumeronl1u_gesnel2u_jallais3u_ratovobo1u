@@ -10,17 +10,28 @@ require_once "vendor/autoload.php";
 class Auth
 {
 
-
+    /**
+     * Méthode permettant de s'authentifier
+     *
+     * @param string $email
+     * @param string $password
+     * @return bool
+     * @throws AuthException
+     */
     public static function authentificate(string $email, string $password): bool
     {
+        // Connection à la base de données
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
+        // Récupération de l'utilisateur
         $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
         $req->bindValue(":email", $email);
         $result = $req->execute();
         if ($result) {
             while ($row = $req->fetch()) {
+                // Vérification du mot de passe
                 if (password_verify($password, $row['password'])) {
+                    // Création de l'objet User et stockage dans la session
                     $user = new User($row['emailUtil'], $row['password']);
                     $_SESSION['user'] = serialize($user);
                     return true;
@@ -30,8 +41,18 @@ class Auth
         throw new AuthException("L'authentification a échoué");
     }
 
+    /**
+     * Méthode permettant de s'inscrire
+     * @param string $email
+     * @param string $password
+     * @param string $nom
+     * @param string $prenom
+     * @return void
+     * @throws AuthException
+     */
     public static function register(string $email, string $password, string $nom, string $prenom)
     {
+        // Connection à la base de données
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         // MDP > 10 caractères
@@ -51,13 +72,16 @@ class Auth
                 }
             }
         }
+        // Hashage du mot de passe
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        // Insertion dans la base de données
         $req = $bdd->prepare("INSERT INTO utilisateur(emailUtil, nomUtil, prenomUtil, password, role) VALUES (:email, :nom, :prenom, :password, 'user')");
         $req->bindValue(":email", $email);
         $req->bindValue(":password", $passwordHash);
         $req->bindValue(":nom", $nom);
         $req->bindValue(":prenom", $prenom);
         $result = $req->execute();
+        // Création de l'objet User et stockage dans la session
         $_SESSION['user'] = serialize(new User($email, $passwordHash));
         if (!$result) {
             echo "<br> L'inscription a échoué <br>";
