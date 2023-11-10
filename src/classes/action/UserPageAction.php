@@ -47,6 +47,17 @@ class UserPageAction extends Action
                     while($row5 = $suiv->fetch()) {
                         $html .= $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
                     }
+                    $html .= "<br> NOTE MOYENNE <br>";
+                    $note = $bdd->prepare("SELECT AVG(note) FROM touite natural join atouite where emailUtil = :email group by emailUtil");
+                    $note->bindValue(":email", $email);
+                    $note->execute();
+                    if($note->rowCount() == 0) {
+                        $html .= "PAS DE NOTE";
+                    }else{
+                        while($row6 = $note->fetch()){
+                            $html .= ceil($row6['AVG(note)']);
+                        }
+                    }
                     $html .= "<br> POUR VOUS <br>";
                     $limite = 10;
                     $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
