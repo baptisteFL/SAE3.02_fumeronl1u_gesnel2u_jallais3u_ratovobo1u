@@ -187,12 +187,15 @@ header > a {
     background-color: #0079b8;
 }
 
-#grayed {
+#grayed, #grayedFollow {
     background-color: #888888;
+}
+
+#grayedFollow {
     margin-left: 1vw;
 }
 
-#grayed:hover {
+#grayed:hover, #grayedFollow:hover {
     background-color: #555555;
 }
 
