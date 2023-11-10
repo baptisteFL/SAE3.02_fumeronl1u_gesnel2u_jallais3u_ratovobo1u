@@ -25,11 +25,21 @@ class Dispatcher
 {
     private $action;
 
+    /**
+     * Constructeur
+     */
+
     public function __construct()
     {
         // Récupère la valeur du paramètre "action" du query-string
         $this->action = isset($_GET['action']) ? $_GET['action'] : 'feed';
     }
+
+    /**
+     * Méthode run du dispatcher qui lance a l'exécution un une instruction associées
+     * @return void
+     * @throws \Exception
+     */
 
     public function run():void
     {
