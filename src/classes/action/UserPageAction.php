@@ -38,6 +38,18 @@ class UserPageAction extends Action
                     $abo->bindValue(":email", $email);
                     $abo->execute();
 
+                    $html .= "<div id='note'><h3>NOTE MOYENNE : ";
+                    $note = $bdd->prepare("SELECT AVG(note) FROM touite natural join atouite where emailUtil = :email group by emailUtil");
+                    $note->bindValue(":email", $email);
+                    $note->execute();
+                    if($note->rowCount() == 0) {
+                        $html .= "PAS DE NOTE</h3></div>";
+                    }else{
+                        while($row6 = $note->fetch()){
+                            $html .= ceil($row6['AVG(note)']) . '</h3></div>';
+                        }
+                    }
+
                     $html .= "<div class='tweet' id='suivis'><div id='content'><div id='block'><h3> Vous suivez :</h3>";
                     while($row4 = $abo->fetch()) {
                         $html .= $row4['nomUtil'] . " ". $row4['prenomUtil']. "<br>";
@@ -46,21 +58,12 @@ class UserPageAction extends Action
                     $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtil where s.emailUtilsuivi = :email");
                     $suiv->BindValue(":email", $email);
                     $suiv->execute();
+
                     $html .= "</div><hr><div id='block'><h3>Ils vous suivent :</h3>";
                     while($row5 = $suiv->fetch()) {
                         $html .= $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
                     }
-                    $html .= "<br> NOTE MOYENNE <br>";
-                    $note = $bdd->prepare("SELECT AVG(note) FROM touite natural join atouite where emailUtil = :email group by emailUtil");
-                    $note->bindValue(":email", $email);
-                    $note->execute();
-                    if($note->rowCount() == 0) {
-                        $html .= "PAS DE NOTE";
-                    }else{
-                        while($row6 = $note->fetch()){
-                            $html .= ceil($row6['AVG(note)']);
-                        }
-                    }
+
                     $html .= "</div></div></div><br><h1 id='foryou'>POUR VOUS</h1><br>";
                     $limite = 10;
                     $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;

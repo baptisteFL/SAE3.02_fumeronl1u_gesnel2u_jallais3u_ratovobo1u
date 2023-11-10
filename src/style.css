@@ -259,6 +259,7 @@ header > a {
 #profil {
     display: flex;
     flex-direction:row;
+    margin-bottom: 0;
 }
 
 #nomcomplet > * {
@@ -298,4 +299,9 @@ header > a {
 #suivis {
     margin: auto;
     min-width: 30%;
+}
+
+#note {
+    margin-top: 0;
+    margin-left: 1.3vw;
 }
