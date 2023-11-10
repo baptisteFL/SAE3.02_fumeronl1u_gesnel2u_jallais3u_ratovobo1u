@@ -56,6 +56,15 @@ class AbonnerTagAction {
                 header('Location:?action=sign-in');
             }
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // sécurité pour éviter les injections
+            if($_POST['tag'] == ""){
+                header('Location:?action=abonner-tag');
+                return "";
+            }
+            if(!preg_match("/^[a-zA-Z0-9\s\p{P}#]+$/", $_POST['tag'])){
+                header('Location:?action=abonner-tag');
+                return "";
+            }
             // fonctionnalité pour rechercher un tag
             $tag = $_POST['tag'];
             ConnectionFactory::makeConnection();
