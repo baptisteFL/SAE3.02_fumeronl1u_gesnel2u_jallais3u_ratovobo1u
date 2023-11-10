@@ -108,11 +108,11 @@ class Dispatcher
         echo '<a href="?action=sign-in"><p>Connexion</p></a>
     <a href="?action=add-user"><p>Inscription</p></a>';
     } else {
-        echo '<a href="?action=log-out"><p>Déconnexion</p></a>';
+        echo '<a href="?action=log-out"><p>Déconnexion</p></a>
+            <a href="?action=mytags"><p>My tags</p></a>
+            <a href="?action=abonnerTag"><p>Abonnement Tag</p></a>';
     }
     echo '
-    <a href="?action=mytags"><p>My tags</p></a>
-    <a href="?action=abonnerTag"><p>Abonnement Tag</p></a>
     <a href="?action=user-page" id="userlink"><img src="images/user.png" alt="user" id="user"/></a>
 
 </header>';

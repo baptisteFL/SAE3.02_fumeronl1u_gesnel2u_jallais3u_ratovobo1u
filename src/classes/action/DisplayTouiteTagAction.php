@@ -39,6 +39,13 @@ class DisplayTouiteTagAction extends Action
 
         //afficher les touites associés au tag
         $result = $requete->execute();
+        $emailUtil = "";
+        if (isset($_SESSION['user'])) {
+            $user = unserialize($_SESSION['user']);
+            $emailUtil = $user->__get('email');
+        } else {
+            header('Location:?action=sign-in');
+        }
         if ($result) {
             $i=0;
             while ($row = $requete->fetch()) {
@@ -46,11 +53,18 @@ class DisplayTouiteTagAction extends Action
                 $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
-                $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'><button>Suivre</button></a></div>
-                    </span>";
-                if(FeedAction::estMonTouite($row['id_touite'])){
-                    $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&displayTag=' . $_GET['libelleTag'] . '"><button id="delete">Supprimer</button></a>';
+                if (FeedAction::estMonTouite($row['id_touite'])) {
+                    $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '&displayTag=' . $_GET["libelleTag"] . '"><button id="delete">Supprimer</button></a>';
+                } else {
+                    if (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                        $html .= "<a href='?action=follow-user&emailSuivi={$row['emailUtil']}&display=displaytouitetag&tag={$_GET["libelleTag"]}'><button id='follow'>Suivre</button></a>";
+                    }
+                    //si on suit l'utilisateur on peut unfollow
+                    if (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                        $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=displaytouitetag&tag={$_GET["libelleTag"]}'><button id='grayed'>Ne plus suivre</button></a>";
+                    }
                 }
+                   $html .= "</span>";
                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                 $html .= '<div class="content">' . $row['texte'] . '</div>';
 
@@ -62,9 +76,9 @@ class DisplayTouiteTagAction extends Action
                 if ($result3) {
                     while ($row3 = $req3->fetch()) {
                         if ($row3['id_tag'] == FeedAction::obtenirTendance()) {
-                            $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                            $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                         } else {
-                            $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                            $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                         }
                     }
                 }

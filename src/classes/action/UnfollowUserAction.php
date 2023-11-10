@@ -23,7 +23,7 @@ class UnfollowUserAction extends Action {
             } catch(Exception $e){
                 die('erreur :'.$e->getMessage());
             }
-            // on récupère le mail de celui qui s'abonne et de la l'abonnement
+            // on récupère le mail de celui qui s'abonne et de l'abonnement
             $emailUtil = unserialize($_SESSION['user'])->__get('email');
             $emailSuivi = $_GET['emailSuivi'];
             if($emailUtil == $emailSuivi){
@@ -35,7 +35,7 @@ class UnfollowUserAction extends Action {
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
                 $verifUtil = $req->fetchColumn();
-                //s'ils sont abonnés on les supprrime de la table suivis
+                //s'ils sont abonnés on les supprime de la table suivis
                 if ($verifUtil == 1){
                     $req2 = $bdd->prepare("DELETE FROM suivis WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
                     $req2->bindValue(":emailUtil", $emailUtil);
@@ -49,7 +49,21 @@ class UnfollowUserAction extends Action {
             header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";
         }
-
+        if (isset($_GET['display'])) {
+            switch ($_GET['display']) {
+                case 'displaytouitetag':
+                    header('Location:?action=display-touite-tag&tag=' . $_GET['tag']);
+                    break;
+                case 'displaytouiteuser':
+                    header('Location:?action=display-touite-user&emailUtil=' . $_GET['user'] . '&page=' . $_GET['page']);
+                    break;
+                case 'displayabotag':
+                    header('Location:?action=mytags');
+                    break;
+            }
+        } else {
+            header('Location:?action=feed&page=1');
+        }
         return $html;
     }
 
