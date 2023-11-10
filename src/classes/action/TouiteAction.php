@@ -32,10 +32,13 @@ class TouiteAction extends Action
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // sécurité pour éviter les injections
             if($_POST['texte'] == ""){
-                throw new AuthException("Veuillez entrer un texte");
+                header('Location:?action=touite');
+                return "";
             }
-            if(!preg_match("/^[a-zA-Z0-9 ]*$/", $_POST['texte'])){
-                throw new AuthException("Veuillez entrer un texte valide");
+            // texte doit contenir lettres chiffres caractères spéciaux, espaces et #
+            if(!preg_match("/^[a-zA-Z0-9\s\p{P}#]+$/", $_POST['texte'])){
+                header('Location:?action=touite');
+                return "";
             }
             if (isset($_SESSION['user'])) {
                 ConnectionFactory::makeConnection();
