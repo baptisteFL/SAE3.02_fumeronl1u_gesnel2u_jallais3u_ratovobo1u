@@ -5,6 +5,7 @@ body {
     background-color: #f0f0f0;
     margin: auto;
     padding: 0;
+    max-width: 100%;
 }
 
 header {
@@ -247,4 +248,60 @@ header > a {
 
 #follow {
     margin-left: 1vw;
+}
+
+.media > *{
+    margin-top: 5vh;
+    max-height: 70%;
+    max-width: 70%;
+}
+
+#profil {
+    display: flex;
+    flex-direction:row;
+    margin-bottom: 0;
+}
+
+#nomcomplet > * {
+    margin-top: 1vh;
+    margin-bottom: 0;
+}
+
+#nomcomplet {
+    margin-left: 1vw;
+}
+
+#spacebtwnname {
+    height: 1vh;
+}
+
+#email {
+    color: #555555;
+    margin-top: 0;
+}
+
+#profil > img {
+    max-width: 7%;
+    max-height: 7%;
+    border-radius: 20%;
+}
+
+#foryou {
+    margin: auto;
+}
+
+#content {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
+
+#suivis {
+    margin: auto;
+    min-width: 30%;
+}
+
+#note {
+    margin-top: 0;
+    margin-left: 1.3vw;
 }

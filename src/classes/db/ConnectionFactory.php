@@ -12,10 +12,20 @@ class ConnectionFactory{
     public static $bdd;
 
 
+    /**
+     * Méthode permet de set la config depuis un paramètre
+     * @param $file
+     * @return void
+     */
 
     public static function setConfig($file){
         self::$configTab = @parse_ini_file($file);
     }
+
+    /**
+     * Méthode qui permet de se connecter à la base de donnée
+     * @return void
+     */
 
     public static function makeConnection(){
         // On se connecte à la base s'il y a une fichier de config et sinon on se connecte à la base de donnée par défaut

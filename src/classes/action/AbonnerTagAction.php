@@ -9,6 +9,12 @@ require_once "vendor/autoload.php";
 
 class AbonnerTagAction {
 
+    /**
+     * Fonction qui permet de s'abonner à un tag si et seulement si celui =-ci existe dans la base de donnée
+     * Modifie la table tagsuivi si l'utilisateur est connecté et si le tag est existant
+     * @return string
+     */
+
     public function execute(): string {
 
         $html = "";
@@ -50,6 +56,15 @@ class AbonnerTagAction {
                 header('Location:?action=sign-in');
             }
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // sécurité pour éviter les injections
+            if($_POST['tag'] == ""){
+                header('Location:?action=abonner-tag');
+                return "";
+            }
+            if(!preg_match("/^[a-zA-Z0-9\s\p{P}#]+$/", $_POST['tag'])){
+                header('Location:?action=abonner-tag');
+                return "";
+            }
             // fonctionnalité pour rechercher un tag
             $tag = $_POST['tag'];
             ConnectionFactory::makeConnection();

@@ -6,18 +6,18 @@ use iutnc\touiteur\action\AbonnerTagAction;
 use iutnc\touiteur\action\AddUserAction;
 use iutnc\touiteur\action\DislikeAction;
 use iutnc\touiteur\action\DisplayAbonnementTagAction;
-use iutnc\touiteur\action\DisplayInfluenceurAction;
+use iutnc\touiteur\action\DisplayTouiteAction;
+use iutnc\touiteur\action\DisplayTouiteTagAction;
+use iutnc\touiteur\action\DisplayTouiteUserAction;
 use iutnc\touiteur\action\FeedAction;
 use iutnc\touiteur\action\LikeAction;
+use iutnc\touiteur\action\LogoutAction;
 use iutnc\touiteur\action\SignInAction;
-use iutnc\touiteur\action\SupprimerTouiteAction;
 use iutnc\touiteur\action\SuivreUtilAction;
+use iutnc\touiteur\action\SupprimerTouiteAction;
 use iutnc\touiteur\action\TouiteAction;
 use iutnc\touiteur\action\UnfollowUserAction;
 use iutnc\touiteur\action\UserPageAction;
-use iutnc\touiteur\action\DisplayTouiteUserAction;
-use iutnc\touiteur\action\DisplayTouiteTagAction;
-use iutnc\touiteur\action\DisplayTouiteAction;
 
 require_once "vendor/autoload.php";
 
@@ -25,11 +25,21 @@ class Dispatcher
 {
     private $action;
 
+    /**
+     * Constructeur
+     */
+
     public function __construct()
     {
         // Récupère la valeur du paramètre "action" du query-string
         $this->action = isset($_GET['action']) ? $_GET['action'] : 'feed';
     }
+
+    /**
+     * Méthode run du dispatcher qui lance a l'exécution un une instruction associées
+     * @return void
+     * @throws \Exception
+     */
 
     public function run():void
     {

@@ -44,11 +44,11 @@ class DisplayTouiteAction extends Action
                 if ($row['cheminIm'] != null) {
                     // .png ou .jpg ou .jpeg ou .gif ou .bmp ou .svg
                     if (preg_match('/\.(png|jpg|jpeg|gif|bmp|svg)$/', $row['cheminIm']))
-                        $html .= '<div class="image"><img src="' . $row['cheminIm'] . '" alt="image" ></div>';
+                        $html .= '<div class="media"><img src="' . $row['cheminIm'] . '" alt="image" ></div>';
                     elseif (preg_match('/\.(mp4|avi|mov|wmv|flv|mkv)$/', $row['cheminIm']))
-                        $html .= '<div class="video"><video controls src="' . $row['cheminIm'] . '" alt="video" type="video/mp4"></video></div>';
+                        $html .= '<div class="media"><video controls src="' . $row['cheminIm'] . '" alt="video" type="video/mp4"></video></div>';
                     elseif(preg_match('/\.(mp3|wav|ogg|wma|aac|flac)$/', $row['cheminIm']))
-                    $html .= '<div class="audio"><audio src="' . $row['cheminIm'] . '" alt="audio"></audio></div>';
+                    $html .= '<div class="media"><audio src="' . $row['cheminIm'] . '" alt="audio"></audio></div>';
                 }
 
                 //afficher les tags du touite
