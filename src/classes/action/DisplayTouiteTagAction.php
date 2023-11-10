@@ -44,11 +44,12 @@ class DisplayTouiteTagAction extends Action
         //afficher les touites associés au tag
         $result = $requete->execute();
         $emailUtil = "";
+        $verif=true;
         if (isset($_SESSION['user'])) {
             $user = unserialize($_SESSION['user']);
             $emailUtil = $user->__get('email');
         } else {
-            header('Location:?action=sign-in');
+            $verif = false;
         }
         if ($result) {
             $i=0;
@@ -60,11 +61,11 @@ class DisplayTouiteTagAction extends Action
                 if (FeedAction::estMonTouite($row['id_touite'])) {
                     $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '&displayTag=' . $_GET["libelleTag"] . '"><button id="delete">Supprimer</button></a>';
                 } else {
-                    if (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                    if ($verif == false) {
+                        $html .= "<a href='?action=sign-in'><button id='follow'>Suivre</button></a>";
+                    } elseif (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
                         $html .= "<a href='?action=follow-user&emailSuivi={$row['emailUtil']}&display=displaytouitetag&tag={$_GET["libelleTag"]}'><button id='follow'>Suivre</button></a>";
-                    }
-                    //si on suit l'utilisateur on peut unfollow
-                    if (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                    } elseif (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
                         $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=displaytouitetag&tag={$_GET["libelleTag"]}'><button id='grayedFollow'>Ne plus suivre</button></a>";
                     }
                 }
@@ -100,7 +101,7 @@ class DisplayTouiteTagAction extends Action
                 } else {
                     $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&libelleTag=' . $_GET['libelleTag'] .'"><button id = "grayed">Retirer</button></a>';
                 }
-                $html .= '<button>Retouite</button>
+                $html .= '
                             </div>
                         </div>';
                 $i++;

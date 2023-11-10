@@ -21,11 +21,13 @@ class FeedAction extends Action
         $bdd = ConnectionFactory::$bdd;
         $emailUtil = "";
 
+        $verif=true;
         if (isset($_SESSION['user'])) {
             $user = unserialize($_SESSION['user']);
             $emailUtil = $user->__get('email');
+        } else {
+            $verif=false;
         }
-
         $limite = 10;
         $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
         $page = $_GET['page'];
@@ -56,7 +58,9 @@ class FeedAction extends Action
 
                         /* BOUTON SUIVRE */
                         //si on ne suit pas l'utilisateur on peut follow
-                        if (!self::estMonTouite($row['id_touite'])) {
+                        if ($verif==false){
+                            $html .= "<a href='?action=sign-in'><button id='follow'>Suivre</button></a>";
+                        } elseif (!self::estMonTouite($row['id_touite'])) {
                             if (!SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
                                 $html .= "<a href='?action=follow-user&emailSuivi={$mail}'><button id='follow'>Suivre</button></a>";
                             }
@@ -66,7 +70,6 @@ class FeedAction extends Action
                             }
                         }
                         $html .= "</span>";
-
                         if (self::estMonTouite($row['id_touite'])) {
                             $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
                         }
@@ -100,7 +103,7 @@ utton></a>';
                         } else {
                             $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
                         }
-                        $html .= '<button>Retouite</button>
+                        $html .= '
     </div>
 </div>';
                     }

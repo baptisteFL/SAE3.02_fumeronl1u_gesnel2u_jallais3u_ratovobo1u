@@ -76,7 +76,7 @@ class DisplayAbonnementTagAction extends Action
                     } else {
                         $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&tags=true"><button id = "grayed">Retirer</button></a>';
                     }
-                    $html .= '<button>Retouite</button>
+                    $html .= '
                             </div>
                         </div>';
                     }

@@ -38,11 +38,12 @@ class DisplayTouiteUserAction extends Action
             $requete->bindValue(":emailUtil", $_GET['emailUtil']);
             $result = $requete->execute();
             if($result){
+                $verif=true;
                 if (isset($_SESSION['user'])) {
                     $user = unserialize($_SESSION['user']);
                     $emailUtil = $user->__get('email');
                 } else {
-                    header('Location:?action=sign-in');
+                    $verif=false;
                 }
                 while($row = $requete->fetch()){
                     $html .= '<div class="tweet">
@@ -51,12 +52,12 @@ class DisplayTouiteUserAction extends Action
                     if (FeedAction::estMonTouite($row['id_touite'])) {
                         $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
                     } else {
-                        if (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailutil'])) {
-                            $html .= "<a href='?action=follow-user&emailSuivi={$row['emailutil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='follow'>Suivre</button></a>";
-                        }
-                        //si on suit l'utilisateur on peut unfollow
-                        if (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailutil'])) {
-                            $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailutil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='grayedFollow'>Ne plus suivre</button></a>";
+                        if ($verif == false) {
+                            $html .= "<a href='?action=sign-in'><button id='follow'>Suivre</button></a>";
+                        } elseif (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                            $html .= "<a href='?action=follow-user&emailSuivi={$row['emailUtil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='follow'>Suivre</button></a>";
+                        } elseif (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                            $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='grayedFollow'>Ne plus suivre</button></a>";
                         }
                     }
                     $html .= "</span>";
@@ -80,11 +81,18 @@ class DisplayTouiteUserAction extends Action
                     //permet d'afficher plus d'informations sur le touite
                     $html .="<br><a href='?action=display-touite&id_touite={$row['id_touite']}'>Voir plus</a>";
                     $html .= '</div>';
-                    $html .= '<div class="actions">
-                                <button id = "like">Like</button>
-                                <button id = "dislike">Dislike</button>
-                                <button>Retouite</button>
-                            </div>
+                    $html .= '<div class="actions">';
+                    if (FeedAction::connaitreLikeDislike($row['id_touite'])[0] == 0) {
+                        $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "like">Like</button></a>';
+                    } else {
+                        $html .= '<a href="?action=like&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
+                    }
+                    if (FeedAction::connaitreLikeDislike($row['id_touite'])[1] == 0) {
+                        $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "dislike">Dislike</button></a>';
+                    } else {
+                        $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&page=' . $page . '"><button id = "grayed">Retirer</button></a>';
+                    }
+                      $html .='      </div>
                         </div>';
                 }
             }
