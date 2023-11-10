@@ -34,7 +34,7 @@ class FeedAction extends Action
 
         $decalage = ($page - 1) * $limite;
 
-        $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc LIMIT :limite OFFSET :decalage");
+        $req = $bdd->prepare("SELECT * FROM TOUITE ORDER BY DATETOUITE DESC LIMIT :limite OFFSET :decalage");
         $req->bindValue(":limite", $limite, PDO::PARAM_INT);
         $req->bindValue(":decalage", $decalage, PDO::PARAM_INT);
         $html = "";
@@ -46,7 +46,7 @@ class FeedAction extends Action
                     while ($row = $req->fetch()) {
                         $html .= '<div class="tweet">
                                     <span id="titleTweet"> ';
-                        $req2 = $bdd->prepare("SELECT * FROM utilisateur natural join atouite where id_touite = :idTouite");
+                        $req2 = $bdd->prepare("select * from UTILISATEUR natural join ATOUITE where ID_TOUITE = :idTouite");
                         $req2->bindValue(":idTouite", $row['id_touite']);
                         $result2 = $req2->execute();
                         if ($result2) {
@@ -76,7 +76,7 @@ class FeedAction extends Action
                         $html .= '<div class="timestamp">' . "Il y a " . $this->calculerDepuisQuand($row['id_touite']) . '</div>';
                         $html .= '<div class="content">' . $row['texte'] . '</div>';
                         $html .= '<div class="tags">';
-                        $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                        $req3 = $bdd->prepare("SELECT * FROM TAG natural join TOUITEPARTAG where id_touite = :idTouite");
                         $req3->bindValue(":idTouite", $row['id_touite']);
                         $result3 = $req3->execute();
                         if ($result3) {
@@ -130,7 +130,7 @@ utton></a>';
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM touitepartag WHERE id_tag = :idTag");
+        $req = $bdd->prepare("SELECT * FROM TOUITEPARTAG WHERE id_tag = :idTag");
         $req->bindValue(":idTag", $idTag);
         $result = $req->execute();
         $i = 0;
@@ -153,7 +153,7 @@ utton></a>';
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM touite WHERE id_touite = :idTouite");
+        $req = $bdd->prepare("SELECT * FROM TOUITE WHERE id_touite = :idTouite");
         $req->bindValue(":idTouite", $id_touite);
         $result = $req->execute();
         if ($result) {
@@ -188,7 +188,7 @@ utton></a>';
      * @param $emailUtil
      * @return string
      */
-    public static function genererPagination($page, $action = 'feed', $emailUtil="")
+    public static function genererPagination($page, $action = 'feed', $emailUtil = "")
     {
         $html = '<div class="pagination">';
         switch ($action) {
@@ -256,10 +256,11 @@ utton></a>';
      * @param $id
      * @return bool
      */
-    public static function estMonTouite($id){
+    public static function estMonTouite($id)
+    {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM atouite WHERE id_touite = :idTouite");
+        $req = $bdd->prepare("SELECT * FROM ATOUITE WHERE id_touite = :idTouite");
         $req->bindValue(":idTouite", $id);
         $result = $req->execute();
         if ($result) {
@@ -284,7 +285,7 @@ utton></a>';
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT count(*) FROM touite");
+        $req = $bdd->prepare("SELECT count(*) FROM TOUITE");
         $result = $req->execute();
         $nombreTouite = $req->fetchColumn();
         return ceil($nombreTouite / 10);
@@ -295,7 +296,8 @@ utton></a>';
      * @param $id
      * @return array|int[]
      */
-    public static function connaitreLikeDislike($id){
+    public static function connaitreLikeDislike($id)
+    {
         if (isset($_SESSION['user'])) {
             $user = unserialize($_SESSION['user']);
             $email = $user->__get('email');
@@ -323,10 +325,11 @@ utton></a>';
      * Méthode qui permet de savoir le tag le plus touité
      * @return mixed
      */
-    public static function obtenirTendance(){
+    public static function obtenirTendance()
+    {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT id_tag FROM touitepartag GROUP BY id_tag HAVING count(id_touite) >= ALL(SELECT count(id_touite) FROM touitepartag GROUP BY id_tag)");
+        $req = $bdd->prepare("SELECT id_tag FROM TOUITEPARTAG GROUP BY id_tag HAVING count(id_touite) >= ALL(SELECT count(id_touite) FROM TOUITEPARTAG GROUP BY id_tag)");
         $result = $req->execute();
         $id = $req->fetchColumn();
         return $id;

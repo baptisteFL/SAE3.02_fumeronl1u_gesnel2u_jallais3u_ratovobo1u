@@ -70,12 +70,12 @@ class TouiteAction extends Action
 
                     // Insérer le fichier dans la base de données (exemple)
 
-                    $reqIm = $bdd->prepare("INSERT INTO image (cheminIm, descIm) VALUES (:chemin, :desc)");
+                    $reqIm = $bdd->prepare("INSERT INTO IMAGE (cheminIm, descIm) VALUES (:chemin, :desc)");
                     $reqIm->bindValue(":chemin", $destinationPath);
                     $reqIm->bindValue(":desc", $fileName);
                     $resultIm = $reqIm->execute();
 
-                    $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, dateTouite,note, cheminIm) VALUES (:id, :texte, :date, :note, :chemin)");
+                    $req = $bdd->prepare("INSERT INTO TOUITE (id_Touite, texte, dateTouite,note, cheminIm) VALUES (:id, :texte, :date, :note, :chemin)");
                     $nouvelleId = self::trouverNouveauId();
                     $req->bindValue(":id", $nouvelleId);
                     $req->bindValue(":texte", $texte);
@@ -85,7 +85,7 @@ class TouiteAction extends Action
                     $result = $req->execute();
 
                 } else {
-                    $req = $bdd->prepare("INSERT INTO touite (id_Touite, texte, dateTouite,note) VALUES (:id, :texte, :date, :note)");
+                    $req = $bdd->prepare("INSERT INTO TOUITE (id_Touite, texte, dateTouite,note) VALUES (:id, :texte, :date, :note)");
                     $nouvelleId = self::trouverNouveauId();
                     $req->bindValue(":id", $nouvelleId);
                     $req->bindValue(":texte", $texte);
@@ -93,13 +93,13 @@ class TouiteAction extends Action
                     $req->bindValue(":note", 0);
                     $result = $req->execute();
                 }
-                $req2 = $bdd->prepare("INSERT INTO atouite (emailUtil,dateTouite, id_Touite) VALUES (:emailUtil,:date, :idTouite)");
+                $req2 = $bdd->prepare("INSERT INTO ATOUITE (emailUtil,dateTouite, id_Touite) VALUES (:emailUtil,:date, :idTouite)");
                 $req2->bindValue(":emailUtil", $user->__get('email'));
                 $req2->bindValue(":date", date("Y-m-d H:i:s"));
                 $req2->bindValue(":idTouite", $nouvelleId);
                 $result2 = $req2->execute();
-                $req3 = $bdd->prepare("INSERT INTO tag (id_tag, libelleTag) VALUES (:idTag, :libelleTag)");
-                $req4 = $bdd->prepare("INSERT INTO touitepartag (id_tag, id_touite) VALUES (:idTag, :idTouite)");
+                $req3 = $bdd->prepare("INSERT INTO TAG (id_tag, libelleTag) VALUES (:idTag, :libelleTag)");
+                $req4 = $bdd->prepare("INSERT INTO TOUITEPARTAG (id_tag, id_touite) VALUES (:idTag, :idTouite)");
                 $tags = self::extraireHastag($texte);
                 if ($tags[0] == "") {
                     $tags = [];
@@ -140,7 +140,7 @@ class TouiteAction extends Action
         // si le tag existe déjà, on récupère son id
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM tag WHERE libelleTag = :libelleTag");
+        $req = $bdd->prepare("SELECT * FROM TAG WHERE libelleTag = :libelleTag");
         $req->bindValue(":libelleTag", $tag);
         $result = $req->execute();
         if ($result) {
@@ -149,7 +149,7 @@ class TouiteAction extends Action
             }
         }
         // sinon on retourne le max + 1
-        $req2 = $bdd->prepare("SELECT MAX(id_tag) FROM tag");
+        $req2 = $bdd->prepare("SELECT MAX(id_tag) FROM TAG");
         $result2 = $req2->execute();
         if ($result2) {
             $row = $req2->fetch();
@@ -166,7 +166,7 @@ class TouiteAction extends Action
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT MAX(id_touite) FROM touite");
+        $req = $bdd->prepare("SELECT MAX(id_touite) FROM TOUITE");
         $result = $req->execute();
         if ($result) {
             $row = $req->fetch();
@@ -185,7 +185,7 @@ class TouiteAction extends Action
     {
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
-        $req = $bdd->prepare("SELECT * FROM tag WHERE libelleTag = :libelleTag");
+        $req = $bdd->prepare("SELECT * FROM TAG WHERE libelleTag = :libelleTag");
         $req->bindValue(":libelleTag", $tag);
         $result = $req->execute();
         if ($result) {

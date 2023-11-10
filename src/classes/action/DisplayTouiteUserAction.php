@@ -26,15 +26,15 @@ class DisplayTouiteUserAction extends Action
 
             $decalage = ($page - 1) * $limite;
 
-            $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc LIMIT :limite OFFSET :decalage");
+            $req = $bdd->prepare("SELECT * FROM TOUITE ORDER BY datetouite DESC LIMIT :limite OFFSET :decalage");
             $req->bindValue(":limite", $limite, PDO::PARAM_INT);
             $req->bindValue(":decalage", $decalage, PDO::PARAM_INT);
 
             //afficher les touites de l'utilisateur a partir de son mail
             $html = "";
-            $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil 
-                                            FROM touite natural join atouite natural join utilisateur 
-                                            WHERE utilisateur.emailUtil = :emailUtil ORDER BY touite.datetouite DESC");
+            $requete = $bdd->prepare("select distinct UTILISATEUR.prenomUtil, UTILISATEUR.nomUtil, TOUITE.id_touite, TOUITE.texte, TOUITE.datetouite, UTILISATEUR.emailUtil
+                                            from TOUITE natural join ATOUITE natural join UTILISATEUR 
+                                            where UTILISATEUR.emailUtil = :emailUtil order by TOUITE.datetouite desc");
             $requete->bindValue(":emailUtil", $_GET['emailUtil']);
             $result = $requete->execute();
             if($result){
@@ -66,7 +66,7 @@ class DisplayTouiteUserAction extends Action
 
                     //afficher les tags du touite
                     $html .= '<div class="tags">';
-                    $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                    $req3 = $bdd->prepare("SELECT * FROM TAG natural join TOUITEPARTAG where id_touite = :idTouite");
                     $req3->bindValue(":idTouite", $row['id_touite']);
                     $result3 = $req3->execute();
                     if ($result3) {

@@ -20,11 +20,11 @@ class DisplayTouiteAction extends Action
         $bdd = ConnectionFactory::$bdd;
         //afficher un touite en detail
         $html = "";
-        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.emailUtil, utilisateur.nomUtil, utilisateur.prenomUtil, touite.id_touite, touite.texte, touite.datetouite, touite.note, touite.cheminIm
-                                    from touite, atouite, utilisateur where touite.id_touite = :idTouite
-                                                                        and utilisateur.emailUtil = atouite.emailUtil 
-                                                                        and atouite.id_touite = touite.id_touite 
-                                                                        order by touite.datetouite desc");
+        $requete = $bdd->prepare("SELECT DISTINCT UTILISATEUR.emailUtil, UTILISATEUR.nomUtil, UTILISATEUR.prenomUtil, TOUITE.id_touite, TOUITE.texte, TOUITE.datetouite, TOUITE.note, TOUITE.cheminIm
+                                    from TOUITE, ATOUITE, UTILISATEUR where TOUITE.id_touite = :idTouite
+                                                                        and UTILISATEUR.emailUtil = ATOUITE.emailUtil 
+                                                                        and ATOUITE.id_touite = TOUITE.id_touite 
+                                                                        order by TOUITE.datetouite desc");
         $requete->bindValue(":idTouite", $_GET['id_touite']);
         $result = $requete->execute();
         if ($result) {
@@ -68,7 +68,7 @@ class DisplayTouiteAction extends Action
 
                 //afficher les tags du touite
                 $html .= '<div class="tags">';
-                $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                $req3 = $bdd->prepare("SELECT * FROM TAG natural join TOUITEPARTAG where id_touite = :idTouite");
                 $req3->bindValue(":idTouite", $row['id_touite']);
                 $result3 = $req3->execute();
                 if ($result3) {

@@ -84,7 +84,7 @@ class AbonnerTagAction {
                 $requeteIdTag->execute();
                 $id_tag = $requeteIdTag->fetchColumn();;
                 // ensuite on prepare l'insertion dans la table
-                $insert = $bdd->prepare("INSERT INTO tagSuivi(emailUtil, id_tag) VALUES (?, ?)");
+                $insert = $bdd->prepare("INSERT INTO TAGSUIVI(emailUtil, id_tag) VALUES (?, ?)");
                 $insert->bindValue(1, $email);
                 $insert->bindValue(2, $id_tag);
                 $insert->execute();

@@ -30,14 +30,14 @@ class UnfollowUserAction extends Action {
                 header('Location:?action=user-page');
             }else{
                 //on vérifie que les utilisateurs sont bien inscrits
-                $req = $bdd->prepare("SELECT count(*) FROM suivis WHERE emailUtil = :emailUtil and emailUtilSuivi = :emailSuivi");
+                $req = $bdd->prepare("SELECT count(*) FROM SUIVIS WHERE emailUtil = :emailUtil and emailUtilSuivi = :emailSuivi");
                 $req->bindValue(":emailUtil", $emailUtil);
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
                 $verifUtil = $req->fetchColumn();
                 //s'ils sont abonnés on les supprime de la table suivis
                 if ($verifUtil == 1){
-                    $req2 = $bdd->prepare("DELETE FROM suivis WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
+                    $req2 = $bdd->prepare("DELETE FROM SUIVIS WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
                     $req2->bindValue(":emailUtil", $emailUtil);
                     $req2->bindValue(":emailSuivi", $emailSuivi);
                     $result2 = $req2->execute();
@@ -75,7 +75,7 @@ class UnfollowUserAction extends Action {
         $bdd = ConnectionFactory::$bdd;
         $req = $bdd->prepare("
         select emailUtilSuivi 
-        FROM suivis 
+        FROM SUIVIS
         WHERE emailUtil = :emailUtil");
         $req->bindValue(":emailUtil", $email);
         $result = $req->execute();
