@@ -35,8 +35,8 @@ class TouiteAction extends Action
                 header('Location:?action=touite');
                 return "";
             }
-            // texte doit contenir lettres chiffres caractères spéciaux, espaces et #
-            if(!preg_match("/^[a-zA-Z0-9\s\p{P}#]+$/", $_POST['texte'])){
+            // texte doit contenir lettres chiffres caractères spéciaux, espaces, accent et #
+            if(!preg_match("/^[a-zA-Z0-9àâäéèêëïîôöùûüç\'\s\#\.\,\?\!\:\;\-\(\)]+$/", $_POST['texte'])){
                 header('Location:?action=touite');
                 return "";
             }
