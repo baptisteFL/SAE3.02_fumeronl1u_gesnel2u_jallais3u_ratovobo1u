@@ -29,10 +29,31 @@ class UserPageAction extends Action
                             $html .= "<br> Email : ". $row['emailUtil'] ."<br>";
                         }
                     }
-                    $html .= "<br> POUR VOUS <br>";
                     $user=unserialize($_SESSION['user']);
                     $email=$user->__get('email');
-                    $requete = $bdd->prepare("(SELECT DISTINCT T.* , U.* FROM TOUITE AS T JOIN ATOUITE AS AT ON T.id_touite = AT.id_touite JOIN SUIVIS AS S ON AT.emailUtil = S.emailUtilSuivi JOIN UTILISATEUR AS U ON S.emailUtilSuivi = U.emailUtil WHERE S.emailUtil = :email) UNION (SELECT DISTINCT T.*, U.* FROM TOUITE AS T JOIN TOUITEPARTAG AS TP ON T.id_touite = TP.id_touite JOIN TAGSUIVI AS TS ON TP.id_tag = TS.id_tag JOIN UTILISATEUR AS U ON TS.emailUtil = U.emailUtil WHERE TS.emailUtil =  :email) ORDER BY dateTouite DESC");
+                    $abo = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtil = :email");
+                    $abo->bindValue(":email", $email);
+                    $abo->execute();
+
+                    $html .= "<br> Vous suivez :<br><br>";
+                    while($row4 = $abo->fetch()) {
+                        $html .= $row4['nomUtil'] . " ". $row4['prenomUtil']. "<br>";
+                    }
+
+                    $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtil where s.emailUtilsuivi = :email");
+                    $suiv->BindValue(":email", $email);
+                    $suiv->execute();
+                    $html .= "<br>Il vous suive :<br>";
+                    while($row5 = $suiv->fetch()) {
+                        $html .= $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
+                    }
+                    $html .= "<br> POUR VOUS <br>";
+                    $limite = 10;
+                    $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+                    $page = $_GET['page'];
+
+                    $decalage = ($page - 1) * $limite;
+                    $requete = $bdd->prepare("(SELECT DISTINCT T.* , U.* FROM TOUITE AS T JOIN ATOUITE AS AT ON T.id_touite = AT.id_touite JOIN SUIVIS AS S ON AT.emailUtil = S.emailUtilSuivi JOIN UTILISATEUR AS U ON S.emailUtilSuivi = U.emailUtil WHERE S.emailUtil = :email) UNION (SELECT DISTINCT T.*, U.* FROM TOUITE AS T JOIN TOUITEPARTAG AS TP ON T.id_touite = TP.id_touite JOIN TAGSUIVI AS TS ON TP.id_tag = TS.id_tag JOIN UTILISATEUR AS U ON TS.emailUtil = U.emailUtil WHERE TS.emailUtil =  :email) ORDER BY dateTouite DESC" . " LIMIT $limite OFFSET $decalage");
                     $requete->bindValue(":email", $email);
                     $requete->execute();
                             while($row = $requete->fetch()) {
@@ -86,22 +107,7 @@ class UserPageAction extends Action
                             </div>
                         </div>';
                             }
-                            $abo = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtil = :email");
-                            $abo->bindValue(":email", $email);
-                            $abo->execute();
-
-                    $html .= "<br> Vous suivez :<br><br>";
-                    while($row4 = $abo->fetch()) {
-                        $html .= $row4['nomUtil'] . " ". $row4['prenomUtil']. "<br>";
-                    }
-
-                    $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtilsuivi = :email");
-                    $suiv->BindValue(":email", $email);
-                    $suiv->execute();
-                    $html .= "<br>Il vous suive :<br>";
-                    while($row5 = $suiv->fetch()) {
-                        $html .= $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
-                    }
+                        $html .= FeedAction::genererPagination($page, "user-page");
 
 
                 }catch (\Exception $e){

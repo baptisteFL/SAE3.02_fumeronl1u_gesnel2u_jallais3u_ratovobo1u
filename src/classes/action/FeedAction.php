@@ -206,6 +206,20 @@ class FeedAction extends Action
                 }
                 $html .= '</div>';
                 break;
+            case 'user-page':
+                if ($page != 1) {
+                    $html .= '<a id="lefta" href="?action=user-page&page=' . ($page - 1) . '"><</a>';
+                } else {
+                    $html .= '<a id="lefta" href="?action=user-page&page=' . $page . '"><</a>';
+                }
+                $html .= '<p>Page ' . $page . '</p>';
+                if ($page < self::calculerNombrePage()) {
+                    $html .= '<a id="righta" href="?action=user-page&page=' . ($page + 1) . '">></a>';
+                } else {
+                    $html .= '<a id="righta" href="?action=user-page&page=' . $page . '">></a>';
+                }
+                $html .= '</div>';
+                break;
             default:
                 if ($page != 1) {
                     $html .= '<a id="lefta" href="?action=feed&page=' . ($page - 1) . '"><</a>';
