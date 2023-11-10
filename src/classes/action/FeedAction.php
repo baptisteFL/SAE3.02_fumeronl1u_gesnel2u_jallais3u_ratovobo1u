@@ -110,7 +110,7 @@ class FeedAction extends Action
                 $html .= $this->genererPagination($page);
             } catch
             (Exception $e) {
-                $html .= "<br> Erreur !<br>";
+                $html .= "<br> Erreur lors de l'affichage des touites !<br>";
             }
         }
         return $html . '
