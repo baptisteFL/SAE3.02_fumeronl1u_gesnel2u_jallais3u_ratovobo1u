@@ -8,6 +8,11 @@ require_once "vendor/autoload.php";
 
 class SupprimerTouiteAction extends Action{
 
+    /**
+     * Méthode qui permet à un utilisateur de supprimer un touite qu'il à posté
+     * @return string
+     */
+
     public function execute(): string
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {

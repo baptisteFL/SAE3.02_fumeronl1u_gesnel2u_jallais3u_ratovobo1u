@@ -9,6 +9,12 @@ require_once "vendor/autoload.php";
 
 class AbonnerTagAction {
 
+    /**
+     * Fonction qui permet de s'abonner à un tag si et seulement si celui =-ci existe dans la base de donnée
+     * Modifie la table tagsuivi si l'utilisateur est connecté et si le tag est existant
+     * @return string
+     */
+
     public function execute(): string {
 
         $html = "";

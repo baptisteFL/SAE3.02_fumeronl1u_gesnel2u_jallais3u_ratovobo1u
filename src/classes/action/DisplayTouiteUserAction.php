@@ -9,6 +9,11 @@ use PDO;
 
 class DisplayTouiteUserAction extends Action
 {
+
+    /**
+     * @return string : la page qui affiche les touites d'un utilisateur voulu
+     * @throws \Exception
+     */
         public function execute() : string
         {
             ConnectionFactory::makeConnection();

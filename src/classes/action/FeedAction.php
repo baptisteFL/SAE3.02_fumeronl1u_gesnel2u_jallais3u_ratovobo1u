@@ -12,6 +12,9 @@ require_once "vendor/autoload.php";
 class FeedAction extends Action
 {
 
+    /**
+     * @return string : affiche la page principal de l'application "feed" avec les touites dans du plus récent au plus ancien
+     */
     public function execute(): string
     {
         ConnectionFactory::makeConnection();
@@ -174,6 +177,13 @@ class FeedAction extends Action
         }
     }
 
+    /**
+     * Méthode qui permet de générer une pagination pour les pages qui affiche des touites
+     * @param $page
+     * @param $action
+     * @param $emailUtil
+     * @return string
+     */
     public static function genererPagination($page, $action = 'feed', $emailUtil="")
     {
         $html = '<div class="pagination">';
@@ -237,6 +247,11 @@ class FeedAction extends Action
         return $html;
     }
 
+    /**
+     * Méthode qui à partir d'un id vérifie si un touite appartient à l'utilisateur connecté
+     * @param $id
+     * @return bool
+     */
     public static function estMonTouite($id){
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
@@ -256,6 +271,11 @@ class FeedAction extends Action
         return false;
     }
 
+    /**
+     * Permet de savoir le nombre de la page
+     * @return false|float
+     */
+
     public static function calculerNombrePage()
     {
         ConnectionFactory::makeConnection();
@@ -266,6 +286,11 @@ class FeedAction extends Action
         return ceil($nombreTouite / 10);
     }
 
+    /**
+     * Méthode qui permet de savoir si un touite possède un like ou un dislike pour que l'application réagisse comme il le faut
+     * @param $id
+     * @return array|int[]
+     */
     public static function connaitreLikeDislike($id){
         if (isset($_SESSION['user'])) {
             $user = unserialize($_SESSION['user']);
@@ -290,6 +315,10 @@ class FeedAction extends Action
         }
     }
 
+    /**
+     * Méthode qui permet de savoir le tag le plus touité
+     * @return mixed
+     */
     public static function obtenirTendance(){
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;

@@ -7,6 +7,9 @@ use iutnc\touiteur\db\ConnectionFactory;
 
 class UserPageAction extends Action
 {
+    /**
+     * @return string : affiche la page d'un utilisateur si celui-ci est connecté
+     */
         public function execute() : string
         {
             ConnectionFactory::makeConnection();
@@ -125,7 +128,7 @@ class UserPageAction extends Action
                     $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
                 }
             return $html;
- 
+
         }
 
 }
