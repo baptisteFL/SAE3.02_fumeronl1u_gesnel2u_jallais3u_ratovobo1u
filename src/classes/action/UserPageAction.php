@@ -79,15 +79,11 @@ class UserPageAction extends Action
                                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&nomUtil={$row['nomUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
                                 if (FeedAction::estMonTouite($row['id_touite'])) {
                                     $html .= '<a href="?action=supprimer-touite&id='. $row['id_touite'] .'&displayUser=true"><button id="delete">Supprimer</button></a>';
-                                } else {
-                                    if (!SuivreUtilAction::connaitreSuivi($email, $row['emailUtil'])) {
+                                } elseif (!SuivreUtilAction::connaitreSuivi($email, $row['emailUtil'])) {
                                         $html .= "<a href='?action=follow-user&emailSuivi={$row['emailUtil']}&display=user-page'><button id='follow'>Suivre</button></a>";
-                                    }
-                                    //si on suit l'utilisateur on peut unfollow
-                                    if (SuivreUtilAction::connaitreSuivi($email, $row['emailUtil'])) {
+                                    } elseif (SuivreUtilAction::connaitreSuivi($email, $row['emailUtil'])) {
                                         $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=user-page'><button id='grayedFollow'>Ne plus suivre</button></a>";
                                     }
-                                }
                                 $html .= "</span>";
                                 $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                                 $html .= '<div class="content">' . $row['texte'] . '</div>';
@@ -120,7 +116,7 @@ class UserPageAction extends Action
                                 } else {
                                     $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&userpage=true' . '"><button id = "grayed">Retirer</button></a>';
                                 }
-                                $html .= '<button>Retouite</button>
+                                $html .= '
                             </div>
                         </div>';
                             }
