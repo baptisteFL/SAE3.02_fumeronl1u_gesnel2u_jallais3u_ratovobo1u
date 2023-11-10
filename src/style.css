@@ -248,3 +248,9 @@ header > a {
 #follow {
     margin-left: 1vw;
 }
+
+.media > *{
+    margin-top: 5vh;
+    max-height: 70%;
+    max-width: 70%;
+}
