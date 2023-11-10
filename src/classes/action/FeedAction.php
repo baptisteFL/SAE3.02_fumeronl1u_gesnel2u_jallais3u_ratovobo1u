@@ -53,18 +53,18 @@ class FeedAction extends Action
 
                         /* BOUTON SUIVRE */
                         //si on ne suit pas l'utilisateur on peut follow
-                        if (!$this->estMonTouite($row['id_touite'])) {
+                        if (!self::estMonTouite($row['id_touite'])) {
                             if (!SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
                                 $html .= "<a href='?action=follow-user&emailSuivi={$mail}'><button id='follow'>Suivre</button></a>";
                             }
                             //si on suit l'utilisateur on peut unfollow
                             if (SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
-                                $html .= "<a href='?action=unfollow-user&emailSuivi={$mail}'><button id='follow'>Ne plus suivre</button></a>";
+                                $html .= "<a href='?action=unfollow-user&emailSuivi={$mail}'><button id='grayed'>Ne plus suivre</button></a>";
                             }
                         }
                         $html .= "</span>";
 
-                        if ($this->estMonTouite($row['id_touite'])) {
+                        if (self::estMonTouite($row['id_touite'])) {
                             $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
                         }
                         $html .= '<div class="timestamp">' . "Il y a " . $this->calculerDepuisQuand($row['id_touite']) . '</div>';
@@ -76,9 +76,9 @@ class FeedAction extends Action
                         if ($result3) {
                             while ($row3 = $req3->fetch()) {
                                 if ($row3['id_tag'] == self::obtenirTendance()) {
-                                    $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                    $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . self::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                                 } else {
-                                    $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                    $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . self::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                                 }
                             }
                         }
@@ -175,21 +175,21 @@ utton></a>';
         }
     }
 
-    public static function genererPagination($page, $action = 'feed')
+    public static function genererPagination($page, $action = 'feed', $emailUtil="")
     {
         $html = '<div class="pagination">';
         switch ($action) {
             case 'display-touite-user':
                 if ($page != 1) {
-                    $html .= '<a id="lefta" href="?action=display-touite-user&page=' . ($page - 1) . '"><</a>';
+                    $html .= '<a id="lefta" href="?action=display-touite-user&emailUtil=' . $emailUtil . '&page=' . ($page - 1) . '"><</a>';
                 } else {
-                    $html .= '<a id="lefta" href="?action=display-touite-user&page=' . $page . '"><</a>';
+                    $html .= '<a id="lefta" href="?action=display-touite-user&emailUtil=' . $emailUtil . '&page=' . $page . '"><</a>';
                 }
                 $html .= '<p>Page ' . $page . '</p>';
                 if ($page < self::calculerNombrePage()) {
-                    $html .= '<a id="righta" href="?action=display-touite-user&page=' . ($page + 1) . '">></a>';
+                    $html .= '<a id="righta" href="?action=display-touite-user&emailUtil=' . $emailUtil . '&page=' . ($page + 1) . '">></a>';
                 } else {
-                    $html .= '<a id="righta" href="?action=display-touite-user&page=' . $page . '">></a>';
+                    $html .= '<a id="righta" href="?action=display-touite-user&emailUtil=' . $emailUtil . '&page=' . $page . '">></a>';
                 }
                 $html .= '</div>';
                 break;

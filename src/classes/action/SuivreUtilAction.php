@@ -58,7 +58,21 @@ class SuivreUtilAction extends Action
             header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";
         }
-
+        if (isset($_GET['display'])) {
+            switch ($_GET['display']) {
+                case 'displaytouitetag':
+                    header('Location:?action=display-touite-tag&tag=' . $_GET['tag']);
+                    break;
+                case 'displaytouiteuser':
+                    header('Location:?action=display-touite-user&emailUtil=' . $_GET['user'] . '&page=' . $_GET['page']);
+                    break;
+                case 'displayabotag':
+                    header('Location:?action=mytags');
+                    break;
+            }
+        } else {
+            header('Location:?action=feed&page=1');
+            }
         return $html;
     }
 

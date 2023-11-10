@@ -33,12 +33,28 @@ class DisplayTouiteUserAction extends Action
             $requete->bindValue(":emailUtil", $_GET['emailUtil']);
             $result = $requete->execute();
             if($result){
+                if (isset($_SESSION['user'])) {
+                    $user = unserialize($_SESSION['user']);
+                    $emailUtil = $user->__get('email');
+                } else {
+                    header('Location:?action=sign-in');
+                }
                 while($row = $requete->fetch()){
                     $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
                     $html .= '<div class="author">'. "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>". $row['prenomUtil'] .' '. $row['nomUtil'] .'</a></div>';
-                    $html .= "<div class='actions' id='follow'><button><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'>Suivre</a></button></div>
-                    </span>";
+                    if (FeedAction::estMonTouite($row['id_touite'])) {
+                        $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&page=' . $_GET['page'] . '"><button id="delete">Supprimer</button></a>';
+                    } else {
+                        if (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailutil'])) {
+                            $html .= "<a href='?action=follow-user&emailSuivi={$row['emailutil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='follow'>Suivre</button></a>";
+                        }
+                        //si on suit l'utilisateur on peut unfollow
+                        if (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailutil'])) {
+                            $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailutil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='grayed'>Ne plus suivre</button></a>";
+                        }
+                    }
+                    $html .= "</span>";
                     $html .= '<div class="timestamp">' . "Il y a " . FeedAction::calculerDepuisQuand($row['id_touite']) . '</div>';
                     $html .= '<div class="content">' . $row['texte'] . '</div>';
 
@@ -50,9 +66,9 @@ class DisplayTouiteUserAction extends Action
                     if ($result3) {
                         while ($row3 = $req3->fetch()) {
                             if ($row3['id_tag'] == FeedAction::obtenirTendance()) {
-                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                $html .= '<p class="trending">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="trending">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                             } else {
-                                $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . $this->calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
+                                $html .= '<p class="tags">' . "<a href='?action=display-touite-tag&libelleTag={$row3['libelleTag']}'>" . '#' . $row3['libelleTag'] . ' </a><p id="numberTweet" class="tags">' . FeedAction::calculerNombreTouiteParTag($row3['id_tag']) . '</p></p>';
                             }
                         }
                     }
@@ -67,9 +83,8 @@ class DisplayTouiteUserAction extends Action
                         </div>';
                 }
             }
-            $html .= FeedAction::genererPagination($page, 'display-touite-user');
+            $html .= FeedAction::genererPagination($page, 'display-touite-user', $_GET['emailUtil']);
 
             return $html;
         }
-
 }

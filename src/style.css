@@ -189,6 +189,7 @@ header > a {
 
 #grayed {
     background-color: #888888;
+    margin-left: 1vw;
 }
 
 #grayed:hover {

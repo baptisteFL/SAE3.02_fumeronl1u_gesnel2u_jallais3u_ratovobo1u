@@ -18,6 +18,7 @@ class ConnectionFactory{
     }
 
     public static function makeConnection(){
+        // On se connecte à la base s'il y a une fichier de config et sinon on se connecte à la base de donnée par défaut
         try{
             self::setConfig("db.config.ini");
             $bdd = @new PDO("mysql:host=localhost;dbname=".self::$configTab['dsn'], self::$configTab['user'], self::$configTab['password']);

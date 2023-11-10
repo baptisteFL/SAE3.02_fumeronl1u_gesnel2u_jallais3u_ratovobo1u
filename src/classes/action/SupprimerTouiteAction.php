@@ -36,6 +36,10 @@ class SupprimerTouiteAction extends Action{
                     header('Location:?action=feed&page=1');
                 } elseif (isset($_GET['displayTag'])){
                     header('Location:?action=display-touite-tag&libelleTag=' . $_GET['displayTag']);
+                } elseif (isset($_GET['displayAboTag'])){
+                    header('Location:?action=mytags');
+                } elseif (isset($_GET['displayUser'])){
+                    header('Location:?action=user-page');
                 }
             }
         }
