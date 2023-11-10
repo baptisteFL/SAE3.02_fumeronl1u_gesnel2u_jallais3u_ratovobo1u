@@ -24,9 +24,9 @@ class UserPageAction extends Action
                     $result = $req->execute();
                     if ($result) {
                         while($row = $req->fetch()){
-                            $html .= "<br> Nom : ". $row['nomUtil'] ."<br>";
-                            $html .= "<br> Prenom : ". $row['prenomUtil'] ."<br>";
-                            $html .= "<br> Email : ". $row['emailUtil'] ."<br>";
+                            $html .= '<div class="tweet" id="profil"><img src="images/pp.jpeg" alt="profile picture"><div id="nomcomplet"><h1>' . $row['prenomUtil'] . ' ';
+                            $html .= $row['nomUtil'] . '</h1>';
+                            $html .= '<p id="email">' . $row['emailUtil'] . '</p></div></div>';
                         }
                     }
                     $user=unserialize($_SESSION['user']);
@@ -35,7 +35,7 @@ class UserPageAction extends Action
                     $abo->bindValue(":email", $email);
                     $abo->execute();
 
-                    $html .= "<br> Vous suivez :<br><br>";
+                    $html .= "<div class='tweet' id='suivis'><div id='content'><div id='block'><h3> Vous suivez :</h3>";
                     while($row4 = $abo->fetch()) {
                         $html .= $row4['nomUtil'] . " ". $row4['prenomUtil']. "<br>";
                     }
@@ -43,11 +43,11 @@ class UserPageAction extends Action
                     $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtil where s.emailUtilsuivi = :email");
                     $suiv->BindValue(":email", $email);
                     $suiv->execute();
-                    $html .= "<br>Il vous suive :<br>";
+                    $html .= "</div><hr><div id='block'><h3>Ils vous suivent :</h3>";
                     while($row5 = $suiv->fetch()) {
                         $html .= $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
                     }
-                    $html .= "<br> POUR VOUS <br>";
+                    $html .= "</div></div></div><br><h1 id='foryou'>POUR VOUS</h1><br>";
                     $limite = 10;
                     $_GET['page'] = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
                     $page = $_GET['page'];
