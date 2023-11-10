@@ -107,12 +107,7 @@ class FeedAction extends Action
                 $html .= $this->genererPagination($page);
             } catch
             (Exception $e) {
-                $html .= "<br> Erreur !<br>";
-                $req = $bdd->prepare("SELECT * FROM agence");
-                $result = $req->execute();
-                while($row = $req->fetch()){
-                    $html .= $row['nomAgence'] . "<br>";
-                }
+                $html .= "<br> Erreur lors de l'affichage des touites !<br>";
             }
         }
         return $html . '
