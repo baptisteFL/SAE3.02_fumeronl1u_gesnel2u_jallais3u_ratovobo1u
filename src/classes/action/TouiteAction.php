@@ -30,6 +30,13 @@ class TouiteAction extends Action
             ';
             //$html .= unserialize($_SESSION['user'])->__get('email');
         } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // sécurité pour éviter les injections
+            if($_POST['texte'] == ""){
+                throw new AuthException("Veuillez entrer un texte");
+            }
+            if(!preg_match("/^[a-zA-Z0-9 ]*$/", $_POST['texte'])){
+                throw new AuthException("Veuillez entrer un texte valide");
+            }
             if (isset($_SESSION['user'])) {
                 ConnectionFactory::makeConnection();
                 $bdd = ConnectionFactory::$bdd;
