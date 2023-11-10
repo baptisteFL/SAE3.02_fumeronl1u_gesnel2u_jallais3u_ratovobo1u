@@ -53,7 +53,6 @@ class SuivreUtilAction extends Action
                 $result = $req->execute();
                 $html = "<p>Vous ne suivez plus {$emailSuivi}</p>";
             }
-            // on redirige vers la page de connexion si l'utilisateur n'est pas connecté
         } else {
             header('Location:?action=sign-in');
             $html = "<p>veuillez vous connecter</p>";
@@ -61,7 +60,10 @@ class SuivreUtilAction extends Action
         if (isset($_GET['display'])) {
             switch ($_GET['display']) {
                 case 'displaytouitetag':
-                    header('Location:?action=display-touite-tag&tag=' . $_GET['tag']);
+                    header('Location:?action=display-touite-tag&libelleTag=' . $_GET['tag']);
+                    break;
+                case 'displaytouite':
+                    header('Location:?action=display-touite&id_touite=' . $_GET['id']);
                     break;
                 case 'displaytouiteuser':
                     header('Location:?action=display-touite-user&emailUtil=' . $_GET['user'] . '&page=' . $_GET['page']);
@@ -72,7 +74,7 @@ class SuivreUtilAction extends Action
             }
         } else {
             header('Location:?action=feed&page=1');
-            }
+        }
         return $html;
     }
 

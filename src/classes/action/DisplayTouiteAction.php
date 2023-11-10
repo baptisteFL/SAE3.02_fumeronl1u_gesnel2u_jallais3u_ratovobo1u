@@ -15,6 +15,7 @@ class DisplayTouiteAction extends Action
      */
     public function execute(): string
     {
+
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         //afficher un touite en detail
@@ -27,12 +28,26 @@ class DisplayTouiteAction extends Action
         $requete->bindValue(":idTouite", $_GET['id_touite']);
         $result = $requete->execute();
         if ($result) {
+            $verif = true;
+            if (isset($_SESSION['user'])) {
+                $user = unserialize($_SESSION['user']);
+                $emailUtil = $user->__get('email');
+            } else {
+                $verif = false;
+            }
             while ($row = $requete->fetch()) {
                 $html .= '<div class="tweet">
                     <span id="titleTweet"> ';
                 $html .= '<div class="author">' . "<a href='?action=display-touite-user&emailUtil={$row['emailUtil']}'>" . $row['prenomUtil'] . ' ' . $row['nomUtil'] . '</a></div>';
-                $html .= "<div class='actions' id='follow'><a href='?action=follow-user&emailSuivi={$row['emailUtil']}'><button>Suivre</button></a></div>
-                        </span>";
+                if ($verif == false) {
+                    $html .= "<div class='actions' id='follow'><a href='?action=sign-in'><button>Suivre</button></a>";
+                } elseif (!SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                    $html .= "<a href='?action=follow-user&emailSuivi={$row['emailUtil']}&display=displaytouite&id=" . $row['id_touite'] . "'><button id='follow'>Suivre</button></a>";
+                } elseif (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailUtil'])) {
+                    $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=displaytouite&id=" . $row['id_touite'] . "'><button id='grayedFollow'>Ne plus suivre</button></a>";
+                }
+
+                $html .= "</span>";
                 if (FeedAction::estMonTouite($row['id_touite'])) {
                     $html .= '<a href="?action=supprimer-touite&id=' . $row['id_touite'] . '&display=true"><button id="delete">Supprimer</button></a>';
                 }
@@ -47,8 +62,8 @@ class DisplayTouiteAction extends Action
                         $html .= '<div class="media"><img src="' . $row['cheminIm'] . '" alt="image" ></div>';
                     elseif (preg_match('/\.(mp4|avi|mov|wmv|flv|mkv)$/', $row['cheminIm']))
                         $html .= '<div class="media"><video controls src="' . $row['cheminIm'] . '" alt="video" type="video/mp4"></video></div>';
-                    elseif(preg_match('/\.(mp3|wav|ogg|wma|aac|flac)$/', $row['cheminIm']))
-                    $html .= '<div class="media"><audio src="' . $row['cheminIm'] . '" alt="audio"></audio></div>';
+                    elseif (preg_match('/\.(mp3|wav|ogg|wma|aac|flac)$/', $row['cheminIm']))
+                        $html .= '<div class="media"><audio src="' . $row['cheminIm'] . '" alt="audio"></audio></div>';
                 }
 
                 //afficher les tags du touite
@@ -78,7 +93,6 @@ class DisplayTouiteAction extends Action
                 } else {
                     $html .= '<a href="?action=dislike&id=' . $row['id_touite'] . '&display=true' . '"><button id = "grayed">Retirer</button></a>';
                 }
-                $html .= '<button>Retouite</button>';
             }
         }
         return $html;

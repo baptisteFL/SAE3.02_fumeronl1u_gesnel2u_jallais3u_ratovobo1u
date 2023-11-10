@@ -52,7 +52,10 @@ class UnfollowUserAction extends Action {
         if (isset($_GET['display'])) {
             switch ($_GET['display']) {
                 case 'displaytouitetag':
-                    header('Location:?action=display-touite-tag&tag=' . $_GET['tag']);
+                    header('Location:?action=display-touite-tag&libelleTag=' . $_GET['tag']);
+                    break;
+                case 'displaytouite':
+                    header('Location:?action=display-touite&id_touite=' . $_GET['id']);
                     break;
                 case 'displaytouiteuser':
                     header('Location:?action=display-touite-user&emailUtil=' . $_GET['user'] . '&page=' . $_GET['page']);
