@@ -24,7 +24,7 @@ class Auth
         ConnectionFactory::makeConnection();
         $bdd = ConnectionFactory::$bdd;
         // Récupération de l'utilisateur
-        $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
+        $req = $bdd->prepare("SELECT * FROM UTILISATEUR WHERE emailUtil = :email");
         // filter var ok sinon exception
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             throw new AuthException("L'email n'est pas valide");
@@ -65,7 +65,7 @@ class Auth
             throw new AuthException("Le mot de passe doit contenir au moins 10 caractères");
         }
         // Email doit être unique
-        $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
+        $req = $bdd->prepare("SELECT * FROM UTILISATEUR WHERE emailUtil = :email");
         $req->bindValue(":email", $email);
         $result = $req->execute();
         if ($result) {
@@ -79,7 +79,7 @@ class Auth
         // Hashage du mot de passe
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         // Insertion dans la base de données
-        $req = $bdd->prepare("INSERT INTO utilisateur(emailUtil, nomUtil, prenomUtil, password, role) VALUES (:email, :nom, :prenom, :password, 'user')");
+        $req = $bdd->prepare("INSERT INTO UTILISATEUR(emailUtil, nomUtil, prenomUtil, password, role) VALUES (:email, :nom, :prenom, :password, 'user')");
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             throw new AuthException("L'email n'est pas valide");
         }

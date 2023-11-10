@@ -25,20 +25,20 @@ class DisplayTouiteTagAction extends Action
 
         $decalage = ($page - 1) * $limite;
 
-        $req = $bdd->prepare("SELECT * FROM touite order by dateTouite desc LIMIT :limite OFFSET :decalage");
+        $req = $bdd->prepare("SELECT * FROM TOUITE order by dateTouite desc LIMIT :limite OFFSET :decalage");
         $req->bindValue(":limite", $limite, PDO::PARAM_INT);
         $req->bindValue(":decalage", $decalage, PDO::PARAM_INT);
 
         //afficher les touites de l'utilisateur
         $html = "";
-        $requete = $bdd->prepare("SELECT DISTINCT utilisateur.prenomUtil, utilisateur.nomUtil, touite.id_touite, touite.texte, touite.datetouite, utilisateur.emailUtil
-                                        FROM touite, tag, touitepartag, utilisateur, atouite 
-                                        where libelleTag= :libelle 
-                                        and touite.id_touite=touitepartag.id_touite 
-                                        and tag.id_tag=touitepartag.id_tag
-                                        and atouite.emailUtil = utilisateur.emailUtil
-                                        and atouite.id_touite = touite.id_touite
-                                        ORDER BY touite.datetouite DESC;");
+        $requete = $bdd->prepare("select distinct UTILISATEUR.prenomUtil, UTILISATEUR.nomUtil, TOUITE.id_touite, TOUITE.texte, TOUITE.dateTouite, UTILISATEUR.emailUtil
+                                        from TOUITE, TAG, TOUITEPARTAG, UTILISATEUR, ATOUITE 
+                                        where libelleTag = :libelle
+                                        and TOUITE.id_touite=TOUITEPARTAG.id_touite
+                                        and tag.id_tag=TOUITEPARTAG.id_tag
+                                        and ATOUITE.emailUtil = UTILISATEUR.emailUtil
+                                        and ATOUITE.id_touite = TOUITE.id_touite
+                                        order by TOUITE.dateTouite desc;");
         $requete->bindValue(":libelle", $_GET['libelleTag']);
 
         //afficher les touites associés au tag
@@ -75,7 +75,7 @@ class DisplayTouiteTagAction extends Action
 
                 //afficher les tags du touite
                 $html .= '<div class="tags">';
-                $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                $req3 = $bdd->prepare("SELECT * FROM TAG NATURAL JOIN TOUITEPARTAG WHERE id_touite = :idTouite");
                 $req3->bindValue(":idTouite", $row['id_touite']);
                 $result3 = $req3->execute();
                 if ($result3) {

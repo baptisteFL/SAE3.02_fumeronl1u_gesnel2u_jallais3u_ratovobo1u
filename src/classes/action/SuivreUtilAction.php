@@ -32,7 +32,7 @@ class SuivreUtilAction extends Action
                 header('Location:?action=user-page');
             } else {
                 // on vérifie que l'utilisateur ne suis pas déjà l'autre
-                $req = $bdd->prepare("SELECT count(*) FROM suivis WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
+                $req = $bdd->prepare("SELECT count(*) FROM SUIVIS WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
                 $req->bindValue(":emailUtil", $emailUtil);
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
@@ -41,13 +41,13 @@ class SuivreUtilAction extends Action
             }
             if ($verif == 0) {
                 // on ajoute l'abonnement dans la base de données
-                $req = $bdd->prepare("INSERT INTO suivis VALUES (:emailUtil, :emailSuivi)");
+                $req = $bdd->prepare("INSERT INTO SUIVIS VALUES (:emailUtil, :emailSuivi)");
                 $req->bindValue(":emailUtil", $emailUtil);
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
                 $html = "<p>Vous suivez {$emailSuivi}</p>";
             } else {
-                $req = $bdd->prepare("DELETE FROM suivis WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
+                $req = $bdd->prepare("DELETE FROM SUIVIS WHERE emailUtil = :emailUtil AND emailUtilSuivi = :emailSuivi");
                 $req->bindValue(":emailUtil", $emailUtil);
                 $req->bindValue(":emailSuivi", $emailSuivi);
                 $result = $req->execute();
@@ -84,7 +84,7 @@ class SuivreUtilAction extends Action
         $bdd = ConnectionFactory::$bdd;
         $req = $bdd->prepare("
         select emailUtilSuivi 
-        FROM suivis 
+        FROM SUIVIS 
         WHERE emailUtil = :emailUtil");
         $req->bindValue(":emailUtil", $email);
         $result = $req->execute();

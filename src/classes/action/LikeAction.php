@@ -24,13 +24,13 @@ class LikeAction extends Action {
                 $user = unserialize($_SESSION['user']);
                 $email = $user->__get('email');
 
-                $verifLike = $bdd->prepare("SELECT count(*) FROM alike WHERE emailUtil = :email AND id_touite = :id");
+                $verifLike = $bdd->prepare("SELECT count(*) FROM ALIKE WHERE emailUtil = :email AND id_touite = :id");
                 $verifLike->bindValue(":email", $email);
                 $verifLike->bindValue(":id", $_GET['id']);
                 $verifLike->execute();
                 $verifieLike = $verifLike->fetchColumn();
 
-                $verifDislike = $bdd->prepare("SELECT count(*) FROM adislike WHERE emailUtil = :email AND id_touite = :id");
+                $verifDislike = $bdd->prepare("SELECT count(*) FROM ADISLIKE WHERE emailUtil = :email AND id_touite = :id");
                 $verifDislike->bindValue(":email", $email);
                 $verifDislike->bindValue(":id", $_GET['id']);
                 $verifDislike->execute();
@@ -38,12 +38,12 @@ class LikeAction extends Action {
 
 
                 if ($verifieLike == 0 && $verifieDislike == 1) {
-                    $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
+                    $req = $bdd->prepare("SELECT note FROM TOUITE WHERE id_touite = :id");
                     $req->bindValue(":id", $_GET['id']);
                     $result = $req->execute();
                     $ancienneVal = $req->fetchColumn();
 
-                    $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
+                    $update = $bdd->prepare("UPDATE TOUITE SET note = :note WHERE id_touite = :id");
                     $update->bindValue(":id", $_GET['id']);
                     $update->bindValue(":note", $ancienneVal + 2);
                     $result = $update->execute();
@@ -59,12 +59,12 @@ class LikeAction extends Action {
                     $result = $delUser->execute();
 
                 } elseif ($verifieLike == 0 && $verifieDislike == 0) {
-                    $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
+                    $req = $bdd->prepare("SELECT note FROM TOUITE WHERE id_touite = :id");
                     $req->bindValue(":id", $_GET['id']);
                     $result = $req->execute();
                     $ancienneVal = $req->fetchColumn();
 
-                    $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
+                    $update = $bdd->prepare("UPDATE TOUITE SET note = :note WHERE id_touite = :id");
                     $update->bindValue(":id", $_GET['id']);
                     $update->bindValue(":note", $ancienneVal + 1);
                     $result = $update->execute();
@@ -74,12 +74,12 @@ class LikeAction extends Action {
                     $addUser->bindValue(":id", $_GET['id']);
                     $result = $addUser->execute();
                 } elseif ($verifieLike == 1) {
-                    $req = $bdd->prepare("SELECT note FROM touite WHERE id_touite = :id");
+                    $req = $bdd->prepare("SELECT note FROM TOUITE WHERE id_touite = :id");
                     $req->bindValue(":id", $_GET['id']);
                     $result = $req->execute();
                     $ancienneVal = $req->fetchColumn();
 
-                    $update = $bdd->prepare("UPDATE touite SET note = :note WHERE id_touite = :id");
+                    $update = $bdd->prepare("UPDATE TOUITE SET note = :note WHERE id_touite = :id");
                     $update->bindValue(":id", $_GET['id']);
                     $update->bindValue(":note", $ancienneVal - 1);
                     $result = $update->execute();

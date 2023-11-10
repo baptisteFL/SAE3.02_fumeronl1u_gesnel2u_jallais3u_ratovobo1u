@@ -50,7 +50,7 @@ class DisplayAbonnementTagAction extends Action
 
                     //afficher les tags du touite
                     $html .= '<div class="tags">';
-                    $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                    $req3 = $bdd->prepare("SELECT * FROM TAG natural join TOUITEPARTAG where id_touite = :idTouite");
                     $req3->bindValue(":idTouite", $row['id_touite']);
                     $result3 = $req3->execute();
                     $tag = " ";

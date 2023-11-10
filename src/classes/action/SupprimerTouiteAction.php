@@ -20,11 +20,11 @@ class SupprimerTouiteAction extends Action{
                 ConnectionFactory::makeConnection();
                 $bdd = ConnectionFactory::$bdd;
 
-                $req = $bdd->prepare("DELETE FROM atouite WHERE id_touite = :id");
-                $req2 = $bdd->prepare("DELETE FROM alike WHERE id_touite = :id");
-                $req3 = $bdd->prepare("DELETE FROM adislike WHERE id_touite = :id");
-                $req4 = $bdd->prepare("DELETE FROM touitepartag WHERE id_touite = :id");
-                $req5 = $bdd->prepare("DELETE FROM touite WHERE id_touite = :id");
+                $req = $bdd->prepare("DELETE FROM ATOUITE WHERE id_touite = :id");
+                $req2 = $bdd->prepare("DELETE FROM ALIKE WHERE id_touite = :id");
+                $req3 = $bdd->prepare("DELETE FROM ADISLIKE WHERE id_touite = :id");
+                $req4 = $bdd->prepare("DELETE FROM TOUITEPARTAG WHERE id_touite = :id");
+                $req5 = $bdd->prepare("DELETE FROM TOUITE WHERE id_touite = :id");
                 $req->bindValue(":id", $_GET['id']);
                 $req2->bindValue(":id", $_GET['id']);
                 $req3->bindValue(":id", $_GET['id']);

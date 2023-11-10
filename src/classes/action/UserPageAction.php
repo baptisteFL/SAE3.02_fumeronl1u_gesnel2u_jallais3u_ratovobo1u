@@ -21,7 +21,7 @@ class UserPageAction extends Action
                 header('Location:?action=sign-in');
                 return $html;
             }
-            $req = $bdd->prepare("SELECT * FROM utilisateur WHERE emailUtil = :email");
+            $req = $bdd->prepare("SELECT * FROM UTILISATEUR WHERE emailUtil = :email");
             $req->bindValue(":email", $user->__get('email'));
                 try{
                     $result = $req->execute();
@@ -34,12 +34,12 @@ class UserPageAction extends Action
                     }
                     $user=unserialize($_SESSION['user']);
                     $email=$user->__get('email');
-                    $abo = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtil = :email");
+                    $abo = $bdd->prepare("SELECT nomUtil, prenomUtil FROM UTILISATEUR as u join suivis as s on u.emailUtil = s.emailUtilsuivi where s.emailUtil = :email");
                     $abo->bindValue(":email", $email);
                     $abo->execute();
 
                     $html .= "<div id='note'><h3>NOTE MOYENNE : ";
-                    $note = $bdd->prepare("SELECT AVG(note) FROM touite natural join atouite where emailUtil = :email group by emailUtil");
+                    $note = $bdd->prepare("SELECT AVG(note) FROM TOUITE natural join ATOUITE where emailUtil = :email group by emailUtil");
                     $note->bindValue(":email", $email);
                     $note->execute();
                     if($note->rowCount() == 0) {
@@ -55,7 +55,7 @@ class UserPageAction extends Action
                         $html .= $row4['nomUtil'] . " ". $row4['prenomUtil']. "<br>";
                     }
 
-                    $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM utilisateur as u join suivis as s on u.emailUtil = s.emailUtil where s.emailUtilsuivi = :email");
+                    $suiv = $bdd->prepare("SELECT nomUtil, prenomUtil FROM UTILISATEUR as U join SUIVIS as S on U.emailUtil = S.emailUtil where S.emailUtilsuivi = :email");
                     $suiv->BindValue(":email", $email);
                     $suiv->execute();
 
@@ -91,7 +91,7 @@ class UserPageAction extends Action
 
                                 //afficher les tags du touite
                                 $html .= '<div class="tags">';
-                                $req3 = $bdd->prepare("SELECT * FROM tag natural join touitepartag where id_touite = :idTouite");
+                                $req3 = $bdd->prepare("SELECT * FROM TAG natural join TOUITEPARTAG where id_touite = :idTouite");
                                 $req3->bindValue(":idTouite", $row['id_touite']);
                                 $result3 = $req3->execute();
                                 if ($result3) {
