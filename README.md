@@ -27,7 +27,7 @@ Lorsque l’on clique sur le nom d’un auteur, on affiche tous les touites de c
 
 L’utilisateur peut afficher les touites associés à un tag (Nicka -> clique sur un tag / Bastien -> MyTag).
 
-Un utilisateur peut s'abonner à un tag, puis s'aff.(Bastien)
+Un utilisateur peut s'abonner à un tag, puis dans la page myTag s'affiche tout les touites contenant le tag.(Bastien)
    
 Le mur d’un utilisateur : c’est la page d’accueil de l’utilisateur. Elle affiche les touites qui l’intéressent le plus. (Bastien)
 
@@ -47,6 +47,10 @@ Afficher les touites d'une personne donnée (Nicka)
 Afficher les touites associer à un tag (Nicka)
 
 Suivre / Unfollow des utilisateurs avec le bouton suivre présent sur les touites. (Nicka)
+
+Sur le mur liste des utilisateurs suivis (Bastien).
+
+Sujet de base de donnée (Bastien / Nicka)
 
 
 
