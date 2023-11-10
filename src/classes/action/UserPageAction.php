@@ -47,7 +47,7 @@ class UserPageAction extends Action
                                     }
                                     //si on suit l'utilisateur on peut unfollow
                                     if (SuivreUtilAction::connaitreSuivi($email, $row['emailUtil'])) {
-                                        $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=user-page'><button id='grayed'>Ne plus suivre</button></a>";
+                                        $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailUtil']}&display=user-page'><button id='grayedFollow'>Ne plus suivre</button></a>";
                                     }
                                 }
                                 $html .= "</span>";

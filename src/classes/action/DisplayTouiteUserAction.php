@@ -51,7 +51,7 @@ class DisplayTouiteUserAction extends Action
                         }
                         //si on suit l'utilisateur on peut unfollow
                         if (SuivreUtilAction::connaitreSuivi($emailUtil, $row['emailutil'])) {
-                            $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailutil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='grayed'>Ne plus suivre</button></a>";
+                            $html .= "<a href='?action=unfollow-user&emailSuivi={$row['emailutil']}&display=displaytouiteuser&user={$_GET['emailUtil']}&page={$page}'><button id='grayedFollow'>Ne plus suivre</button></a>";
                         }
                     }
                     $html .= "</span>";

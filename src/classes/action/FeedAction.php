@@ -59,7 +59,7 @@ class FeedAction extends Action
                             }
                             //si on suit l'utilisateur on peut unfollow
                             if (SuivreUtilAction::connaitreSuivi($emailUtil, $mail)) {
-                                $html .= "<a href='?action=unfollow-user&emailSuivi={$mail}'><button id='grayed'>Ne plus suivre</button></a>";
+                                $html .= "<a href='?action=unfollow-user&emailSuivi={$mail}'><button id='grayedFollow'>Ne plus suivre</button></a>";
                             }
                         }
                         $html .= "</span>";
