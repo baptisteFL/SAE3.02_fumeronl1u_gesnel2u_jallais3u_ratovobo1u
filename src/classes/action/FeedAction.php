@@ -109,6 +109,11 @@ utton></a>';
             } catch
             (Exception $e) {
                 $html .= "<br> Erreur !<br>";
+                $req = $bdd->prepare("SELECT * FROM agence");
+                $result = $req->execute();
+                while($row = $req->fetch()){
+                    $html .= $row['nomAgence'] . "<br>";
+                }
             }
         }
         return $html . '
