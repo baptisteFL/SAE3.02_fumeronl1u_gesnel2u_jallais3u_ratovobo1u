@@ -5,6 +5,10 @@ namespace iutnc\touiteur\action;
 class LogoutAction extends Action
 {
 
+    /**
+     * Méthode qui permet à un utilisateur connecté de se déconnecté
+     * @return string
+     */
     public function execute(): string
     {
 

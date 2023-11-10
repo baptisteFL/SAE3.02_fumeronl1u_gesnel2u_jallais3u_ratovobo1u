@@ -7,6 +7,9 @@ use iutnc\touiteur\db\ConnectionFactory;
 
 class UserPageAction extends Action
 {
+    /**
+     * @return string : affiche la page d'un utilisateur si celui-ci est connecté
+     */
         public function execute() : string
         {
             ConnectionFactory::makeConnection();
@@ -46,6 +49,17 @@ class UserPageAction extends Action
                     $html .= "</div><hr><div id='block'><h3>Ils vous suivent :</h3>";
                     while($row5 = $suiv->fetch()) {
                         $html .= $row5['nomUtil'] . " ". $row5['prenomUtil']. "<br>";
+                    }
+                    $html .= "<br> NOTE MOYENNE <br>";
+                    $note = $bdd->prepare("SELECT AVG(note) FROM touite natural join atouite where emailUtil = :email group by emailUtil");
+                    $note->bindValue(":email", $email);
+                    $note->execute();
+                    if($note->rowCount() == 0) {
+                        $html .= "PAS DE NOTE";
+                    }else{
+                        while($row6 = $note->fetch()){
+                            $html .= ceil($row6['AVG(note)']);
+                        }
                     }
                     $html .= "</div></div></div><br><h1 id='foryou'>POUR VOUS</h1><br>";
                     $limite = 10;
@@ -114,7 +128,7 @@ class UserPageAction extends Action
                     $html .= "<br> Vous n'avez pas accès à cet utilisateur !<br>";
                 }
             return $html;
- 
+
         }
 
 }

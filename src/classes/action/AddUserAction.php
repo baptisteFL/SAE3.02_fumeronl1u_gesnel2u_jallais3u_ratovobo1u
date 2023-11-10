@@ -11,6 +11,10 @@ require_once "vendor/autoload.php";
 class AddUserAction extends Action
 {
 
+    /**
+     * Fonction qui permet à un utilisateur d'ajouter un user
+     * @return string
+     */
     public function execute(): string
     {
         $html = "";

@@ -9,6 +9,10 @@ use PDO;
 
 class DisplayTouiteTagAction extends Action
 {
+    /**
+     * @return String: la page qui contient l'affichage des touites avec le tag voulu
+     * @throws \Exception
+     */
     public function execute(): string
     {
         ConnectionFactory::makeConnection();
